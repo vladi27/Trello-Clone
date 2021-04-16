@@ -6,12 +6,12 @@ import {
   setActiveBoard,
   updateBoard,
   deleteBoard,
-  updateMostRecentBoards
+  updateMostRecentBoards,
 } from "../../actions/board_actions";
 import {
   logout,
   update,
-  updateRecentBoards
+  updateRecentBoards,
 } from "../../actions/session_actions";
 import { fetchAllLists } from "../../actions/lists_actions";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -34,6 +34,10 @@ const Content = styled.div`
   // height: 700px;
   background: #2d90cb;
   z-index: 2;
+`;
+
+const Form = styled.form`
+  width: 100%;
 `;
 
 const PageWrapper = styled.div`
@@ -180,17 +184,19 @@ class BoardShow extends React.Component {
 
     this.state = {
       isEditing: false,
-      title: ""
+      title: "",
+      email: "",
     };
 
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
+    this.handleSubmitInvite = this.handleSubmitInvite.bind(this);
   }
 
   componentDidMount() {
-    this.props.fetchBoard(this.props.match.params.boardId).then(board =>
+    this.props.fetchBoard(this.props.match.params.boardId).then((board) =>
       this.setState({
         title: this.props.board.title,
-        isEditing: false
+        isEditing: false,
       })
     );
 
@@ -218,7 +224,7 @@ class BoardShow extends React.Component {
 
   getCards(list) {
     let allCards = this.props.cards;
-    let cards = list.card_positions.map(position => {
+    let cards = list.card_positions.map((position) => {
       allCards[position];
     });
 
@@ -256,18 +262,42 @@ class BoardShow extends React.Component {
       {},
       {
         title: this.state.title,
-        id: this.props.board.id
+        id: this.props.board.id,
       }
     );
     this.props.updateBoard(newBoard).then(this.setState({ isEditing: false }));
     //   .then((this.props.title = this.state.title));
   }
 
+  updateEmail(e) {
+    this.setState({ email: e.currentTarget.value });
+  }
+
+  handleSubmitInvite(e) {
+    e.preventDefault();
+    const boardId = this.props.board.id;
+    const email = this.state.email;
+
+    const invitation = {
+      email,
+      user_board_id: boardId,
+    };
+
+    const createInvite = (invite) =>
+      $.ajax({
+        method: "POST",
+        url: `/api/invitations/`,
+        data: { invitation },
+      });
+
+    createInvite(invitation);
+  }
+
   renderEditInput() {
     let styles = {
       overflow: "hidden",
       overflowWrap: "break-word",
-      height: "32px"
+      height: "32px",
     };
     return (
       <form onSubmit={this.handleFinishEditing}>
@@ -280,7 +310,7 @@ class BoardShow extends React.Component {
           autoFocus
           onFocus={this.handleFocus}
           onBlur={this.handleCloseForm.bind(this)}
-          onKeyDown={e => {
+          onKeyDown={(e) => {
             if (e.charCode == 13) {
               this.handleFinishEditing;
             }
@@ -330,7 +360,7 @@ class BoardShow extends React.Component {
                   direction="horizontal"
                   type="list"
                 >
-                  {provided => (
+                  {(provided) => (
                     <ListsContainer
                       {...provided.droppableProps}
                       ref={provided.innerRef}
@@ -338,7 +368,7 @@ class BoardShow extends React.Component {
                       {listOrder.map((listID, index) => {
                         const list = this.props.lists[listID];
                         if (list) {
-                          const cards = list.card_positions.map(pos => {
+                          const cards = list.card_positions.map((pos) => {
                             return this.props.cards[pos];
                           });
 
@@ -365,6 +395,25 @@ class BoardShow extends React.Component {
               </DragDropContext>
             </StyledWrapper>
           </BoardWrapper>
+          <div className="invite-test">
+            <form onSubmit={this.handleSubmitInvite}>
+              <div className="boardWrapper">
+                <input
+                  id="subtleStyle"
+                  type="email"
+                  onChange={this.updateEmail.bind(this)}
+                  placeholder="Invite"
+                />
+              </div>
+
+              <input
+                className="disabled"
+                id="formButton"
+                type="submit"
+                value="Submit Invite"
+              />
+            </form>
+          </div>
         </Content>
       </PageWrapper>
     );
@@ -377,18 +426,18 @@ const msp = (state, ownProps) => {
     recentActiveBoards: Object.values(state.entities.users)[0].recent_boards,
     lists: state.entities.lists,
     cards: state.entities.cards,
-    user: state.entities.users
+    user: state.entities.users,
   };
 };
 
-const mdp = dispatch => ({
-  fetchBoard: id => dispatch(fetchBoard(id)),
-  updateBoard: board => dispatch(updateBoard(board)),
+const mdp = (dispatch) => ({
+  fetchBoard: (id) => dispatch(fetchBoard(id)),
+  updateBoard: (board) => dispatch(updateBoard(board)),
   deleteBoard: (boardId, userId) => dispatch(deleteBoard(boardId, userId)),
-  fetchAllLists: id => dispatch(fetchAllLists(id)),
-  update: user => dispatch(update(user)),
-  setActiveBoard: id => dispatch(setActiveBoard(id)),
-  updateMostRecentBoards: recentBoards =>
+  fetchAllLists: (id) => dispatch(fetchAllLists(id)),
+  update: (user) => dispatch(update(user)),
+  setActiveBoard: (id) => dispatch(setActiveBoard(id)),
+  updateMostRecentBoards: (recentBoards) =>
     dispatch(updateMostRecentBoards(recentBoards)),
   sort: (
     droppableIdStart,
@@ -409,13 +458,10 @@ const mdp = dispatch => ({
         type,
         boardID
       )
-    )
+    ),
 });
 
-export default connect(
-  msp,
-  mdp
-)(BoardShow);
+export default connect(msp, mdp)(BoardShow);
 
 {
   /* <div>

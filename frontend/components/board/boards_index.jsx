@@ -6,6 +6,7 @@ import NavBarContainer from "../nav_bar/nav_bar_container";
 import BoardIndexItem from "./board_index_item";
 import { Clock } from "styled-icons/fa-regular/Clock";
 import { User } from "styled-icons/boxicons-regular/User";
+import merge from "lodash/merge";
 
 const HomeWrapper = styled.div`
   // display: flex;
@@ -139,14 +140,20 @@ class BoardsIndex extends React.Component {
     this.props.fetchAllBoards();
   }
 
-  renderBoards() {
-    const boards = Object.values(this.props.boards);
+  renderBoards(type) {
+    let boards;
+    console.log(this.props);
+    if (type === "owned") {
+      boards = Object.values(this.props.ownedBoards);
+    } else {
+      boards = Object.values(this.props.sharedBoards);
+    }
 
     if (boards.length === 0) {
       return;
     }
 
-    return boards.map(board => {
+    return boards.map((board) => {
       return (
         <BoardIndexItem
           board={board}
@@ -162,7 +169,12 @@ class BoardsIndex extends React.Component {
 
   renderMostActiveBoards() {
     const recents = this.state.recentBoards;
-    const allBoards = this.props.boards;
+    const allBoards = merge(
+      {},
+      this.props.ownedBoards,
+      this.props.sharedBoards
+    );
+
     if (Object.values(allBoards).length < recents.length) {
       return <p>Loading...</p>;
     }
@@ -186,13 +198,18 @@ class BoardsIndex extends React.Component {
           </RecentViewsContainer>
           <AllBoardsContainer>
             <RecentTitleContainer>
-              <h3>All Boards</h3>
+              <h3>My Boards</h3>
               <UserIcon />
             </RecentTitleContainer>
             <AllBoards>
-              {this.renderBoards()}
+              {this.renderBoards("owned")}
               {this.props.createNewBoard}
             </AllBoards>
+            <RecentTitleContainer>
+              <h3>Shared Boards</h3>
+              <UserIcon />
+            </RecentTitleContainer>
+            {this.renderBoards("shared")}
           </AllBoardsContainer>
         </HomeWrapper>
       </AllWraper>

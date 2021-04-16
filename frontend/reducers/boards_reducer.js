@@ -1,7 +1,7 @@
 import {
   RECEIVE_BOARDS,
   RECEIVE_BOARD,
-  REMOVE_BOARD
+  REMOVE_BOARD,
 } from "../actions/board_actions";
 
 import { RECEIVE_LIST, REMOVE_LIST } from "../actions/lists_actions";
@@ -12,12 +12,18 @@ const boardsReducer = (obj = {}, action) => {
   switch (action.type) {
     case RECEIVE_BOARDS:
       let arr = ["cards", "lists"];
-      let allBoards = {};
+      let allBoards = { sharedBoards: {}, ownedBoards: {} };
+      console.log(action.boards);
       let receivedBoards = Object.keys(action.boards);
 
-      receivedBoards.forEach(key => {
+      receivedBoards.forEach((key) => {
         if (arr.indexOf(key) === -1) {
-          allBoards[key] = action.boards[key];
+          const receivedBoard = action.boards[key];
+          if (receivedBoard["shared_board"]) {
+            allBoards["sharedBoards"][key] = action.boards[key];
+          } else {
+            allBoards["ownedBoards"][key] = action.boards[key];
+          }
         }
       });
       return merge({}, obj, allBoards);
@@ -52,7 +58,7 @@ const boardsReducer = (obj = {}, action) => {
         droppableIndexEnd,
         droppableIndexStart,
 
-        type
+        type,
       } = action.payload;
 
       // draggin lists around

@@ -1,35 +1,48 @@
 class Api::UsersController < ApplicationController
 
-  
-    
+
+
   def create
-    @user = User.new(user_params)
+    @user = User.new(user_params.except(:invite_token))
+    @token = params[:user][:invite_token]
+
     if @user.save
-      login!(@user)
-      render  'api/users/show'
-    
+      if @token != nil
+          board_id = Invitation.find_by(token:@token).user_board_id
+
+          # membership.board_id = board_id
+          # membership.user_id = @user.id
+          # membership.save
+           board = Board.find(board_id)
+           @user.boards.push(board)
+      end
+
+    login!(@user)
+    render  'api/users/show'
+
     else
       render json: @user.errors.full_messages, status: 422
-    end
+      end
+
   end
 
-  def update 
+  def update
         @user = User.find(params[:id])
             if @user.update(user_params)
-                render :show 
+                render :show
             else
-                render json: @user.errors.full_messages, status: 422 
+                render json: @user.errors.full_messages, status: 422
      end
   end
 
-  def update_recent_boards  
+  def update_recent_boards
    @user = User.find(params[:id])
-    
+
     if params[:user].key?(:recent_boards)
 
         @user.recent_boards = params[:user][:recent_boards]
         @user.save
-    else 
+    else
         @user.recent_boards = []
         @user.save
     end
@@ -38,7 +51,7 @@ class Api::UsersController < ApplicationController
 
 
   def user_params
-    params.require(:user).permit(:username, :email, :password, :id, {:recent_boards => []})
+    params.require(:user).permit(:username, :email, :invite_token, :password, :id, {:recent_boards => []})
   end
 
 

@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import {
   fetchAllBoards,
-  updateMostRecentBoards
+  updateMostRecentBoards,
 } from "../../actions/board_actions";
 import { openModal, closeModal } from "../../actions/modal_actions";
 import { logout, update } from "../../actions/session_actions";
@@ -76,20 +76,26 @@ const BoardTitleCreate = styled.h3`
   // margin-top: 0px;
 `;
 
-const msp = state => ({
-  // boards: Object.values(state.entities.boards),
-  boards: state.entities.boards,
-  recentActiveBoards: Object.values(state.entities.users)[0].recent_boards,
-  user: state.entities.users
-});
+const msp = (state) => {
+  console.log(state.entities);
+  let ownedBoards = state.entities.boards.ownedBoards || {};
+  let sharedBoards = state.entities.boards.sharedBoards || {};
+  return {
+    // boards: Object.values(state.entities.boards),
+    ownedBoards: ownedBoards,
+    sharedBoards,
+    recentActiveBoards: Object.values(state.entities.users)[0].recent_boards,
+    user: state.entities.users,
+  };
+};
 
-const mdp = dispatch => ({
+const mdp = (dispatch) => ({
   fetchAllBoards: () => dispatch(fetchAllBoards()),
   fetchAllLists: () => dispatch(fetchAllLists()),
   fetchAllCards: () => dispatch(fetchAllCards()),
-  update: user => dispatch(update(user)),
+  update: (user) => dispatch(update(user)),
   logout: () => dispatch(logout()),
-  updateMostRecentBoards: recentBoards =>
+  updateMostRecentBoards: (recentBoards) =>
     dispatch(updateMostRecentBoards(recentBoards)),
   createNewBoard: (
     <BoardThumbnailCreate
@@ -97,13 +103,10 @@ const mdp = dispatch => ({
     >
       <BoardTitleCreate>Create new Board</BoardTitleCreate>
     </BoardThumbnailCreate>
-  )
+  ),
 });
 
-export default connect(
-  msp,
-  mdp
-)(BoardsIndex);
+export default connect(msp, mdp)(BoardsIndex);
 
 // createNewBoard: (
 //   <li className="boards-list-item">

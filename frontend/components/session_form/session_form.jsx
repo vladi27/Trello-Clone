@@ -1,4 +1,5 @@
 import React from "react";
+import queryString from "query-string";
 
 class SessionForm extends React.Component {
   constructor(props) {
@@ -8,7 +9,7 @@ class SessionForm extends React.Component {
       username: "",
       password: "",
       email: "",
-      disabled: true
+      disabled: true,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -59,23 +60,26 @@ class SessionForm extends React.Component {
       {},
       {
         username: "random",
-        password: "0123456789"
+        password: "0123456789",
       }
     );
     this.props.processDemo(user);
     this.setState({
       email: "",
-      password: ""
+      password: "",
     });
   }
 
   handleSubmit(e) {
     e.preventDefault();
+    let params = queryString.parse(this.props.location.search);
+    console.log(params);
     let { password, email, username } = this.state;
     const newUser = {
       password,
       email,
-      username
+      username,
+      invite_token: params["invite_token"],
     };
     const user2 = Object.assign({}, newUser);
     this.props.processForm(user2);

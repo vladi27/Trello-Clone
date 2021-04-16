@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+//import pic from "./public/trello.svg";
 
 class GreetingHero extends React.Component {
   constructor(props) {
@@ -7,6 +8,8 @@ class GreetingHero extends React.Component {
   }
 
   render() {
+    const src = '<%= asset_path("trello.svg") %>';
+    console.log({ src });
     return (
       <section id="hero">
         <div className="white-space" />
@@ -21,8 +24,9 @@ class GreetingHero extends React.Component {
               Sign Up - It's Free!
             </Link>
           </p>
+          <img src={window.logo} />
         </div>
-        <div className="hero-image" />
+        <div className="hero-image"></div>
       </section>
     );
   }

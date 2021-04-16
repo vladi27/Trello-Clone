@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_25_015454) do
+ActiveRecord::Schema.define(version: 2021_04_07_225325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,16 @@ ActiveRecord::Schema.define(version: 2019_08_25_015454) do
     t.index ["list_id"], name: "index_cards_on_list_id"
   end
 
+  create_table "invitations", force: :cascade do |t|
+    t.string "email"
+    t.integer "user_board_id"
+    t.integer "sender_id"
+    t.integer "recipient_id"
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "lists", force: :cascade do |t|
     t.string "title", null: false
     t.integer "board_id", null: false
@@ -43,6 +53,21 @@ ActiveRecord::Schema.define(version: 2019_08_25_015454) do
     t.string "card_positions", default: [], array: true
     t.index ["board_id"], name: "index_lists_on_board_id"
     t.index ["card_positions"], name: "index_lists_on_card_positions", using: :gin
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "board_id", null: false
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "name"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
+    t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -55,6 +80,14 @@ ActiveRecord::Schema.define(version: 2019_08_25_015454) do
     t.string "recent_boards", default: [], array: true
     t.index ["recent_boards"], name: "index_users_on_recent_boards", using: :gin
     t.index ["session_token"], name: "index_users_on_session_token"
+  end
+
+  create_table "users_roles", id: false, force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "role_id"
+    t.index ["role_id"], name: "index_users_roles_on_role_id"
+    t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
+    t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
 end

@@ -5,23 +5,24 @@ class Api::BoardsController < ApplicationController
         @board = Board.new(board_params)
         @board.owner_id = current_user.id
         if @board.save
-            render :show    
+            render :show
     else
-            render json: @board.errors.full_messages, status: 422 
+            render json: @board.errors.full_messages, status: 422
         end
     end
 
     def index
-        @boards = current_user.boards
+        @boards = current_user.owned_boards
+        @shared_boards = current_user.boards
         render :index
     end
 
-    def update 
+    def update
         @board = Board.find(params[:id])
             if @board.update(board_params)
-                render :show 
+                render :show
             else
-                render json: @board.errors.full_messages, status: 422 
+                render json: @board.errors.full_messages, status: 422
      end
   end
 
@@ -36,14 +37,14 @@ class Api::BoardsController < ApplicationController
     head :no_content
     end
 
-    def update_lists_pos  
+    def update_lists_pos
     @board = Board.find(params[:id])
-    
+
     if params[:board].key?(:list_positions)
 
         @board.list_positions = params[:board][:list_positions]
         @board.save
-    else 
+    else
         @board.list_positions = []
         @board.save
     end
@@ -51,7 +52,7 @@ class Api::BoardsController < ApplicationController
   end
 
 
-    
+
     def board_params
     params.require(:board).permit(:title, {:list_positions => []}, :id)
 
