@@ -81,9 +81,10 @@ const msp = (state) => {
   let ownedBoards = state.entities.boards.ownedBoards || {};
   let sharedBoards = state.entities.boards.sharedBoards || {};
   return {
-    // boards: Object.values(state.entities.boards),
-    ownedBoards: ownedBoards,
-    sharedBoards,
+    boards: Object.values(state.entities.boards),
+    allBoards: state.entities.boards,
+    // ownedBoards: ownedBoards,
+    // sharedBoards,
     recentActiveBoards: Object.values(state.entities.users)[0].recent_boards,
     user: state.entities.users,
   };

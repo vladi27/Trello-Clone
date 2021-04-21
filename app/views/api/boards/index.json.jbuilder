@@ -27,6 +27,21 @@ json.owned_boards
 end
 
                 end
+
+
+      json.comments do
+                board.lists.each do |list|
+
+                list.cards.each do |card|
+                card.comments.each do |comment|
+                json.set! comment.id do
+                json.extract! comment, :id, :body, :card_id, :author
+                end
+end
+end
+end
+
+                end
                 end
 end
 
@@ -59,5 +74,26 @@ json.shared_boards
 end
 
                 end
+
+
+
+                json.comments do
+                board.lists.each do |list|
+
+                list.cards.each do |card|
+                card.comments.each do |comment|
+                json.set! comment.id do
+                json.extract! comment, :id, :body, :card_id, :author
                 end
 end
+end
+end
+
+                end
+                end
+
+
+                end
+
+
+

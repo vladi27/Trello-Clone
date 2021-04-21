@@ -144,9 +144,17 @@ class BoardsIndex extends React.Component {
     let boards;
     console.log(this.props);
     if (type === "owned") {
-      boards = Object.values(this.props.ownedBoards);
+      boards = this.props.boards.filter((board) => {
+        if (!("shared_board" in board)) {
+          return board;
+        }
+      });
     } else {
-      boards = Object.values(this.props.sharedBoards);
+      boards = this.props.boards.filter((board) => {
+        if ("shared_board" in board) {
+          return board;
+        }
+      });
     }
 
     if (boards.length === 0) {
@@ -169,11 +177,9 @@ class BoardsIndex extends React.Component {
 
   renderMostActiveBoards() {
     const recents = this.state.recentBoards;
-    const allBoards = merge(
-      {},
-      this.props.ownedBoards,
-      this.props.sharedBoards
-    );
+    const allBoards = this.props.allBoards;
+
+    console.log(allBoards);
 
     if (Object.values(allBoards).length < recents.length) {
       return <p>Loading...</p>;

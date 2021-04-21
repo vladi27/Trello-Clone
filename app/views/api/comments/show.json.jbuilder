@@ -1,0 +1,1 @@
+json.extract! @comment, :author, :card_id, :id, :body

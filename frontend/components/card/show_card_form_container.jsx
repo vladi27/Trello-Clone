@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Textarea from "react-textarea-autosize";
 import { editCard } from "../../actions/cards_actions";
+import { createComment } from "../../actions/comments_actions";
 import CardDescriptionForm from "./card_description_form";
+import CommentForm from "../comment/comment_form";
+import TrelloComment from "../comment/trello_comment";
 import { Close } from "styled-icons/material/Close";
 import { closeModal } from "../../actions/modal_actions";
 import { CreditCard } from "styled-icons/boxicons-regular/CreditCard";
@@ -154,7 +157,7 @@ class ShowCardForm extends React.Component {
       {},
       {
         title: this.state.title,
-        id: this.props.card.id
+        id: this.props.card.id,
       }
     );
     this.props.editCard(newCard).then(this.setState({ isEditing: false }));
@@ -165,7 +168,7 @@ class ShowCardForm extends React.Component {
     let styles = {
       overflow: "hidden",
       overflowWrap: "break-word",
-      height: "32px"
+      height: "32px",
     };
     return (
       <form onSubmit={this.handleFinishEditing}>
@@ -177,7 +180,7 @@ class ShowCardForm extends React.Component {
           autoFocus
           onFocus={this.handleFocus}
           onBlur={this.handleCloseForm.bind(this)}
-          onKeyDown={e => {
+          onKeyDown={(e) => {
             if (e.charCode == 13) {
               this.handleFinishEditing;
             }
@@ -191,6 +194,12 @@ class ShowCardForm extends React.Component {
     const { title } = this.props.card;
     const list = this.props.lists[`list-${this.props.card.list_id}`];
     const { isEditing } = this.state;
+    const comments = Object.values(this.props.comments).filter((comment) => {
+      let cardId = this.props.card.id;
+      if (cardId === comment.card_id) {
+        return comment;
+      }
+    });
 
     return (
       <div>
@@ -211,29 +220,41 @@ class ShowCardForm extends React.Component {
             card={this.props.card}
             editCard={this.props.editCard}
           />
+          <CardIcon size="10" />
+          <CommentForm
+            username={this.props.username}
+            createComment={this.props.createComment}
+            card={this.props.card}
+          />
+          {Object.values(comments).map((comment) => (
+            <TrelloComment comment={comment} />
+          ))}
         </HeaderContainer>
       </div>
     );
   }
 }
 
-const msp = state => {
+const msp = (state) => {
   let revised = state.activeCard;
   //console.log(revised);
   let card = state.entities.cards[revised];
+  let userID = Object.keys(state.entities.users)[0];
+  let username = state.entities.users[userID].username;
   let lists = state.entities.lists;
-  return { card, lists };
+  let comments = state.entities.comments;
+  return { card, lists, username, comments };
 };
 
-const mdp = dispatch => ({
-  editCard: card => dispatch(editCard(card)),
-  closeModal: () => dispatch(closeModal())
+const mdp = (dispatch) => ({
+  editCard: (card) => dispatch(editCard(card)),
+  closeModal: () => dispatch(closeModal()),
+  createComment: (comment) => dispatch(createComment(comment)),
+  editComment: (comment) => dispatch(editComment(comment)),
+  deleteComment: (commentId) => dispatch(deleteComment(commentId)),
 });
 
-export default connect(
-  msp,
-  mdp
-)(ShowCardForm);
+export default connect(msp, mdp)(ShowCardForm);
 
 // console.log(this.props);
 // const { title } = this.props;
