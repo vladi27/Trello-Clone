@@ -12,29 +12,29 @@ class Api::CardsController < ApplicationController
 
      def create
         @card = Card.new(card_params)
-    
+
         if @card.save
-            render :show    
+            render :show
     else
-            render json: @card.errors.full_messages, status: 422 
+            render json: @card.errors.full_messages, status: 422
         end
     end
 
-    def update 
-        
+    def update
+
         @card = Card.find(params[:id])
-      
+
         if @card.update(card_params)
-                render :show 
+                render :show
         else
-                render json: @card.errors.full_messages, status: 422 
+                render json: @card.errors.full_messages, status: 422
         end
     end
 
     def destroy
-   
+
     @card = Card.find(params[:id])
-   
+
     @card.destroy
     head :no_content
     end
@@ -43,8 +43,8 @@ class Api::CardsController < ApplicationController
 
      private
     def card_params
-    params.require(:card).permit(:title, :list_id, :body, :id)
+    params.require(:card).permit(:title, :list_id, :body, :id, :due_date)
 
     end
-    
+
 end

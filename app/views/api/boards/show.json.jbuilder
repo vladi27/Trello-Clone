@@ -10,7 +10,7 @@ json.lists do
          json.cards do
                 list.cards.each do |card|
                  json.set! card.id do
-                json.extract! card, :id, :title, :list_id, :body
+                json.extract! card, :id, :title, :list_id, :body, :due_date
                 end
          json.comments do
                 card.comments.each do |comment|

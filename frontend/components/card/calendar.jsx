@@ -1,0 +1,175 @@
+// import React, { useState } from "react";
+// import styled from "styled-components";
+// import MomentUtils from "@date-io/moment";
+// import {
+//   DatePicker,
+//   TimePicker,
+//   DateTimePicker,
+//   MuiPickersUtilsProvider,
+// } from "@material-ui/pickers";
+
+// // import DatePicker from "react-datepicker";
+
+// // import "react-datepicker/dist/react-datepicker.css";
+
+// //CSS Modules, react-datepicker-cssmodules.css
+// // import "react-datepicker/dist/react-datepicker-cssmodules.css";
+// import Calendar from "react-calendar";
+
+// // const Calendar = () => {
+// //   const [startDate, setStartDate] = useState(new Date());
+// //   return (
+// //     <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+// //   );
+// // };
+
+// // class Calendar extends React.Component {
+// //   constructor(props) {
+// //     super(props);
+// //     this.state = { date: "", time: "" };
+// //     this.handleFinishEditing = this.handleFinishEditing.bind(this);
+// //   }
+
+// const TrelloCalendar = () => {
+//   const [value, onChange] = useState(new Date());
+
+//   return (
+//     <div>
+//       <Calendar onChange={onChange} value={value} />
+//     </div>
+//   );
+// };
+
+// //
+// // }
+
+// export default TrelloCalendar;
+
+import React from "react";
+// import Code from "../../_shared/Code";
+import { Grid } from "@material-ui/core";
+import { Formik, Form, Field, useFormik } from "formik";
+import { KeyboardDateTimePicker } from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
+import {
+  DatePicker,
+  TimePicker,
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+import CalendarValue from "./values";
+import DateFnsUtils from "@date-io/date-fns";
+
+const DatePickerField = ({ field, form, ...other }) => {
+  const currentError = form.errors[field.name];
+
+  return (
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <DateTimePicker
+        clearable
+        disablePast
+        name={field.name}
+        value={field.value}
+        format="yyyy/MM/dd hh:mm a"
+        helperText={currentError}
+        error={Boolean(currentError)}
+        onError={(error) => {
+          // handle as a side effect
+          if (error !== currentError) {
+            form.setFieldError(field.name, error);
+          }
+        }}
+        // if you are using custom validation schema you probably want to pass `true` as third argument
+        onChange={(date) => form.setFieldValue(field.name, date, true)}
+        {...other}
+      />
+    </MuiPickersUtilsProvider>
+  );
+};
+
+const TrelloCalendar = (props) => {
+  //   const formik = useFormik({
+  //     initialValues: {
+  //       date: new Date(),
+  //     },
+  //     onSubmit: (values) => {
+  //       console.log(JSON.stringify(values, null, 2));
+  //     },
+  //   });
+  return (
+    <Formik initialValues={{ date: new Date() }}>
+      {({ values, errors }) => (
+        <Form>
+          <Grid container>
+            <Grid item container justify="left" xs={12}>
+              <Field name="date" component={DatePickerField} />
+            </Grid>
+
+            <Grid item xs={12} sm={12} style={{ margin: "24px" }}>
+              <CalendarValue
+                children={JSON.stringify({ errors, values }, null, 2)}
+                card={props.card}
+                editCard={props.editCard}
+              />
+            </Grid>
+          </Grid>
+        </Form>
+      )}
+    </Formik>
+  );
+};
+
+export default TrelloCalendar;
+
+// import React from "react";
+// import Code from "../../_shared/Code";
+// import { Grid } from "@material-ui/core";
+// import { Formik, Form, Field } from "formik";
+// import { KeyboardDatePicker } from "@material-ui/pickers";
+
+// const DatePickerField = ({ field, form, ...other }) => {
+//   const currentError = form.errors[field.name];
+
+//   return (
+//     <KeyboardDatePicker
+//       clearable
+//       disablePast
+//       name={field.name}
+//       value={field.value}
+//       format="dd/MM/yyyy"
+//       helperText={currentError}
+//       error={Boolean(currentError)}
+//       onError={(error) => {
+//         // handle as a side effect
+//         if (error !== currentError) {
+//           form.setFieldError(field.name, error);
+//         }
+//       }}
+//       // if you are using custom validation schema you probably want to pass `true` as third argument
+//       onChange={(date) => form.setFieldValue(field.name, date, false)}
+//       {...other}
+//     />
+//   );
+// };
+
+// const FormikExample = () => {
+//   return (
+//     <Formik onSubmit={console.log} initialValues={{ date: new Date() }}>
+//       {({ values, errors }) => (
+//         <Form>
+//           <Grid container>
+//             <Grid item container justify="center" xs={12}>
+//               <Field name="date" component={DatePickerField} />
+//             </Grid>
+
+//             <Grid item xs={12} sm={12} style={{ margin: "24px" }}>
+//               <Code children={JSON.stringify({ errors, values }, null, 2)} />
+//             </Grid>
+//           </Grid>
+//         </Form>
+//       )}
+//     </Formik>
+//   );
+// };
+
+// export default FormikExample;

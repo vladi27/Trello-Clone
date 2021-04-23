@@ -14,6 +14,7 @@ import Modal from "./modal/modal";
 const App = () => (
   <div>
     <Modal />
+
     <Switch>
       <AuthRoute path="/signup" component={SignUpFormContainer} />
       <AuthRoute path="/login" component={LogInFormContainer} />

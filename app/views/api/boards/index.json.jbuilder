@@ -21,7 +21,7 @@ json.owned_boards
 
                 list.cards.each do |card|
                  json.set! card.id do
-                json.extract! card, :id, :title, :list_id, :body
+                json.extract! card, :id, :title, :list_id, :body, :due_date
                 end
 
 end
@@ -68,7 +68,7 @@ json.shared_boards
 
                 list.cards.each do |card|
                  json.set! card.id do
-                json.extract! card, :id, :title, :list_id, :body
+                json.extract! card, :id, :title, :list_id, :body, :due_date
                 end
 
 end

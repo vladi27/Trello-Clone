@@ -1,4 +1,4 @@
-json.extract! @card, :title, :list_id, :id, :body
+json.extract! @card, :title, :list_id, :id, :body, :due_date
 
  json.comments do
                 @card.comments.each do |comment|

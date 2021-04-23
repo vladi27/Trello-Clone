@@ -5,11 +5,21 @@ import Textarea from "react-textarea-autosize";
 import { editCard } from "../../actions/cards_actions";
 import { createComment } from "../../actions/comments_actions";
 import CardDescriptionForm from "./card_description_form";
+import TrelloCalendar from "./calendar";
 import CommentForm from "../comment/comment_form";
 import TrelloComment from "../comment/trello_comment";
 import { Close } from "styled-icons/material/Close";
 import { closeModal } from "../../actions/modal_actions";
 import { CreditCard } from "styled-icons/boxicons-regular/CreditCard";
+import MomentUtils from "@date-io/moment";
+const moment = require("moment");
+
+import {
+  DatePicker,
+  TimePicker,
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 
 const ModalWrapper = styled.div`
   margin-left: 40px;
@@ -150,6 +160,18 @@ class ShowCardForm extends React.Component {
     e.preventDefault();
     this.setState({ title: e.currentTarget.value });
   }
+  convertUTCDateToLocalDate(date) {
+    var newDate = new Date(
+      date.getTime() + date.getTimezoneOffset() * 60 * 1000
+    );
+
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+
+    newDate.setHours(hours - offset);
+
+    return newDate;
+  }
 
   handleFinishEditing(e) {
     e.preventDefault();
@@ -200,6 +222,12 @@ class ShowCardForm extends React.Component {
         return comment;
       }
     });
+    const dueDateUTC = this.props.card["due_date"];
+    console.log(dueDateUTC);
+    if (dueDateUTC) {
+      var localDate = moment(dueDateUTC).local().format("YYYY-MM-DD hh:mm A");
+    }
+    console.log(localDate);
 
     return (
       <div>
@@ -230,6 +258,13 @@ class ShowCardForm extends React.Component {
             <TrelloComment comment={comment} />
           ))}
         </HeaderContainer>
+        {dueDateUTC ? localDate : null}
+        {/* <MuiPickersUtilsProvider utils={MomentUtils}>
+          <DatePicker />
+          <TimePicker />
+          <DateTimePicker value={selectedDate} onChange={handleDateChange} />
+        </MuiPickersUtilsProvider> */}
+        <TrelloCalendar card={this.props.card} editCard={this.props.editCard} />
       </div>
     );
   }
