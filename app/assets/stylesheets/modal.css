@@ -23,6 +23,33 @@
   display: flex;
 }
 
+.submit-button {
+  height: 40px;
+  width: 100%;
+  display: block;
+  margin: 12px auto;
+  margin-bottom: 0;
+  position: absolute;
+  bottom: 0;
+  background-color: #5aac44;
+  box-shadow: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+.submit-button-disabled {
+  height: 40px;
+  width: 100%;
+  display: block;
+  margin: 12px auto;
+  margin-bottom: 0;
+  position: absolute;
+  bottom: 0;
+  background-color: gray;
+  box-shadow: none;
+  border: none;
+  color: #fff;
+}
 .window-overlay {
   align-items: flex-start;
   background-color: rgba(0, 0, 0, 0.64);
@@ -101,6 +128,17 @@
   width: 296px;
   border-radius: 3px;
   display: block;
+}
+
+.invitemodal {
+  width: 304px;
+  overflow: visible;
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
+  display: none;
+  left: 364.047px;
+  top: 122px;
 }
 
 #formButton {

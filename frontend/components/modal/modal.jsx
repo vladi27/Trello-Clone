@@ -2,6 +2,7 @@ import React from "react";
 import { closeModal } from "../../actions/modal_actions";
 import { connect } from "react-redux";
 import CreateNewBoardContainer from "../board/create_new_board_container";
+import InviteFormContainer from "../board/invite_form_container";
 import ShowCardFormContainer from "../card/show_card_form_container";
 import NavMenuContainer from "../nav_bar/nav_menu_container";
 function Modal({ modal, closeModal }) {
@@ -14,7 +15,7 @@ function Modal({ modal, closeModal }) {
       component = <CreateNewBoardContainer />;
       return (
         <div className="modal-background" onClick={closeModal}>
-          <div className="modal-child" onClick={e => e.stopPropagation()}>
+          <div className="modal-child" onClick={(e) => e.stopPropagation()}>
             {component}
           </div>
         </div>
@@ -24,7 +25,16 @@ function Modal({ modal, closeModal }) {
 
       return (
         <div className="window-overlay" onClick={closeModal}>
-          <div className="window-child" onClick={e => e.stopPropagation()}>
+          <div className="window-child" onClick={(e) => e.stopPropagation()}>
+            {component}
+          </div>
+        </div>
+      );
+    case "open invite form":
+      component = <InviteFormContainer />;
+      return (
+        <div className="window-overlay" onClick={closeModal}>
+          <div className="modal-child" onClick={(e) => e.stopPropagation()}>
             {component}
           </div>
         </div>
@@ -34,7 +44,7 @@ function Modal({ modal, closeModal }) {
 
       return (
         <div className="nav-modal-background" onClick={closeModal}>
-          <div className="nav-modal" onClick={e => e.stopPropagation()}>
+          <div className="nav-modal" onClick={(e) => e.stopPropagation()}>
             {component}
           </div>
         </div>
@@ -42,22 +52,19 @@ function Modal({ modal, closeModal }) {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    modal: state.ui.modal
+    modal: state.ui.modal,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    closeModal: () => dispatch(closeModal())
+    closeModal: () => dispatch(closeModal()),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Modal);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);
 
 // function Modal({ modal, closeModal }) {
 //   if (!modal) {

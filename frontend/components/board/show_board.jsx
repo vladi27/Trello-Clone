@@ -23,6 +23,7 @@ import TrelloCreate from "../trello_create";
 import { sort } from "../../actions/lists_actions";
 import { Tgch } from "styled-icons/crypto";
 import { Delete } from "styled-icons/feather/Delete";
+import { openModal } from "../../actions/modal_actions";
 
 const Content = styled.div`
   flex-grow: 1;
@@ -178,6 +179,46 @@ const DeleteIcon = styled(Delete)`
   }
 `;
 
+const InviteContainer = styled.a`
+  background-color: rgba(0, 0, 0, 0.08);
+  padding-left: 12px;
+  margin-left: 30px;
+  border-radius: 3px;
+  color: #fff;
+
+  float: left;
+  font-size: 14px;
+  height: 32px;
+  line-height: 32px;
+  margin: 0 4px 4px 0;
+  max-width: 400px;
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  text-decoration: none;
+  text-overflow: ellipsis;
+`;
+
+const InviteButton = styled.span`
+  padding-right: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 32px;
+  font-size: 14px;
+
+  font-weight: 400;
+  cursor: pointer;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+
+  ${InviteContainer}:hover & {
+    background: rgba(0, 0, 0, 0.08);
+  }
+`;
+
 class BoardShow extends React.Component {
   constructor(props) {
     super(props);
@@ -269,8 +310,11 @@ class BoardShow extends React.Component {
     //   .then((this.props.title = this.state.title));
   }
 
-  updateEmail(e) {
-    this.setState({ email: e.currentTarget.value });
+  handleInviteForm(e) {
+    e.preventDefault();
+    const boardId = this.props.board.id;
+    this.props.setActiveBoard(boardId);
+    this.props.openInviteForm();
   }
 
   handleSubmitInvite(e) {
@@ -353,6 +397,9 @@ class BoardShow extends React.Component {
                     onClick={this.handleDeleteBoard.bind(this)}
                   ></DeleteIcon>
                 </MenuLink>
+                <InviteContainer onClick={this.handleInviteForm.bind(this)}>
+                  <InviteButton>Invite</InviteButton>
+                </InviteContainer>
               </BoardHeader>
               <DragDropContext onDragEnd={this.onDragEnd.bind(this)}>
                 <Droppable
@@ -395,25 +442,6 @@ class BoardShow extends React.Component {
               </DragDropContext>
             </StyledWrapper>
           </BoardWrapper>
-          <div className="invite-test">
-            <form onSubmit={this.handleSubmitInvite}>
-              <div className="boardWrapper">
-                <input
-                  id="subtleStyle"
-                  type="email"
-                  onChange={this.updateEmail.bind(this)}
-                  placeholder="Invite"
-                />
-              </div>
-
-              <input
-                className="disabled"
-                id="formButton"
-                type="submit"
-                value="Submit Invite"
-              />
-            </form>
-          </div>
         </Content>
       </PageWrapper>
     );
@@ -431,12 +459,14 @@ const msp = (state, ownProps) => {
 };
 
 const mdp = (dispatch) => ({
+  openInviteForm: () => dispatch(openModal("open invite form")),
   fetchBoard: (id) => dispatch(fetchBoard(id)),
   updateBoard: (board) => dispatch(updateBoard(board)),
   deleteBoard: (boardId, userId) => dispatch(deleteBoard(boardId, userId)),
   fetchAllLists: (id) => dispatch(fetchAllLists(id)),
   update: (user) => dispatch(update(user)),
   setActiveBoard: (id) => dispatch(setActiveBoard(id)),
+
   updateMostRecentBoards: (recentBoards) =>
     dispatch(updateMostRecentBoards(recentBoards)),
   sort: (
@@ -462,24 +492,3 @@ const mdp = (dispatch) => ({
 });
 
 export default connect(msp, mdp)(BoardShow);
-
-{
-  /* <div>
-            <NavBarContainer />
-          </div> */
-}
-{
-  /* <div className="content-board">
-            <div className="board-wrapper">
-              <div className="board-main-content">
-                <div className="board-header">
-                  <div className="board-canvas">
-                    <div>
-                      <h3>{board.title}</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */
-}

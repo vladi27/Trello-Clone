@@ -6,6 +6,7 @@ import NavBarContainer from "../nav_bar/nav_bar_container";
 import BoardIndexItem from "./board_index_item";
 import { Clock } from "styled-icons/fa-regular/Clock";
 import { User } from "styled-icons/boxicons-regular/User";
+import { UserShared } from "styled-icons/remix-line/UserShared";
 import merge from "lodash/merge";
 
 const HomeWrapper = styled.div`
@@ -33,7 +34,7 @@ const HomeWrapper = styled.div`
 const ClockIcon = styled(Clock)`
   left: -40px;
   position: absolute;
-  top: -8px;
+  top: 5px;
   height: 30px;
   line-height: 32px;
   width: 30px;
@@ -43,7 +44,16 @@ const ClockIcon = styled(Clock)`
 const UserIcon = styled(User)`
   left: -40px;
   position: absolute;
-  top: -8px;
+  top: 5px;
+  height: 30px;
+  line-height: 32px;
+  width: 30px;
+  color: #42526e;
+`;
+const SharedIcon = styled(UserShared)`
+  left: -40px;
+  position: absolute;
+  top: 5px;
   height: 30px;
   line-height: 32px;
   width: 30px;
@@ -90,7 +100,7 @@ const AllBoardsContainer = styled.div`
 
 const RecentTitleContainer = styled.div`
   margin: 0 0 0 40px;
-  padding: 0 0 11px;
+  padding: 8px 0 11px;
   position: relative;
   display: flex;
 `;
@@ -213,9 +223,9 @@ class BoardsIndex extends React.Component {
             </AllBoards>
             <RecentTitleContainer>
               <h3>Shared Boards</h3>
-              <UserIcon />
+              <SharedIcon />
             </RecentTitleContainer>
-            {this.renderBoards("shared")}
+            <AllBoards>{this.renderBoards("shared")}</AllBoards>
           </AllBoardsContainer>
         </HomeWrapper>
       </AllWraper>
