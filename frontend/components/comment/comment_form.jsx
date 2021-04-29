@@ -19,6 +19,52 @@ const StyledTextArea = styled(Textarea)`
   width: 100%;
 `;
 
+const TextContainer = styled.div`
+  margin-bottom: 0;
+  padding-bottom: 0;
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+
+  margin-inline-end: 0px;
+  margin: 0 0 8px;
+  cursor: pointer;
+`;
+const BorderFormContainer = styled.div`
+  background-color: #fff;
+  box-shadow: none;
+  border: none;
+  border-radius: 3px;
+  display: block;
+  min-height: 40px;
+  padding: 8px 12px;
+  text-decoration: none;
+  transition: background 0.1s ease-in;
+  ${TextContainer}:hover & {
+    background: #ccc;
+  }
+`;
+const BodyForm = styled.div`
+  // background-color: rgba(9, 30, 66, 0.04);
+  // box-shadow: none;
+  // border: none;
+  // border-radius: 3px;
+  display: block;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+  min-height: 40px;
+  // padding: 8px 12px;
+  text-decoration: none;
+  // transition: background 0.3s ease-in;
+  // ${TextContainer}:hover & {
+  //   background: #ccc;
+  // }
+`;
+
 class CommentForm extends React.Component {
   constructor(props) {
     super(props);
@@ -43,27 +89,75 @@ class CommentForm extends React.Component {
       }
     );
     this.props.createComment(newComment);
+    this.handleCloseForm();
+    this.setState({ body: "" });
+  }
+
+  handleCloseForm(e) {
+    // e.preventDefault();
+    this.setState({ isEditing: false });
+  }
+
+  renderEditInput() {
+    const placeholder = "Write a comment...";
+    const text = this.state.body;
+
+    return (
+      <div>
+        <StyledTextArea
+          style={{ marginBottom: "2px" }}
+          placeholder={placeholder}
+          autoFocus
+          value={text}
+          onChange={this.handleChange.bind(this)}
+          onBlur={this.handleCloseForm.bind(this)}
+        />
+
+        <TrelloButton
+          disabled={this.state.body ? "true" : ""}
+          onClick={this.handleNewComment.bind(this)}
+        >
+          Save
+        </TrelloButton>
+      </div>
+    );
   }
 
   render() {
     const text = this.state.body;
+    const { isEditing } = this.state;
+
     return (
       <div>
-        <StyledTextArea
-          style={{ marginBottom: "4px" }}
-          placeholder="Add a comment"
-          autoFocus
-          value={text}
-          onChange={this.handleChange.bind(this)}
-          //   onBlur={this.handleCloseForm.bind(this)}
-        />
-
-        <TrelloButton onClick={this.handleNewComment.bind(this)}>
-          Save
-        </TrelloButton>
+        {isEditing ? (
+          this.renderEditInput()
+        ) : (
+          <TextContainer>
+            <BorderFormContainer
+              onClick={() => this.setState({ isEditing: true })}
+            >
+              <BodyForm>Write a comment...</BodyForm>
+            </BorderFormContainer>
+          </TextContainer>
+        )}
       </div>
     );
   }
 }
 
 export default CommentForm;
+
+// <div>
+//   <StyledTextArea
+//     style={{ marginBottom: "4px" }}
+//     placeholder="Add a comment"
+//     autoFocus
+//     value={text}
+//     onChange={this.handleChange.bind(this)}
+//     //   onBlur={this.handleCloseForm.bind(this)}
+//   />
+
+//   <TrelloButton onClick={this.handleNewComment.bind(this)}>
+//     Save
+//   </TrelloButton>
+// </div>

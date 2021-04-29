@@ -3,8 +3,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Textarea from "react-textarea-autosize";
 import { editCard } from "../../actions/cards_actions";
-import { createComment } from "../../actions/comments_actions";
+import {
+  createComment,
+  deleteComment,
+  editComment,
+} from "../../actions/comments_actions";
 import CardDescriptionForm from "./card_description_form";
+import CommentInitials from "./initials";
 import TrelloCalendar from "./calendar";
 import CommentForm from "../comment/comment_form";
 import TrelloComment from "../comment/trello_comment";
@@ -131,14 +136,24 @@ const StyledInput = styled.input`
   box-shadow: inset 0 0 0 2px #dfe1e6;
 `;
 
-// class Modal extends Component {
-//   componentDidMount() {
-//     document.body.classList.add(MODAL_OPEN_CLASS);
-//   }
+const MemberInitialsContainer = styled.div`
+  position: absolute;
+  left: -40px;
+`;
 
-//   componentWillUnmount() {
-//     document.body.classList.remove(MODAL_OPEN_CLASS);
-//   }
+const MemberInitials = styled.span`
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  height: 32px;
+  left: 0;
+  line-height: 32px;
+  overflow: hidden;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 100%;
+`;
 
 class ShowCardForm extends React.Component {
   constructor(props) {
@@ -186,6 +201,23 @@ class ShowCardForm extends React.Component {
     //   .then((this.props.title = this.state.title));
   }
 
+  sortComments(dateArray) {
+    console.log(dateArray);
+    let sorted = dateArray.sort((a, b) => this.desc(a, b));
+    console.log(sorted);
+    return sorted;
+  }
+
+  desc(a, b) {
+    const aDate = a["updated_at"]
+      ? new Date(a["updated_at"])
+      : new Date(a["created_at"]);
+    const bDate = b["updated_at"]
+      ? new Date(b["updated_at"])
+      : new Date(b["created_at"]);
+    return bDate.getTime() - aDate.getTime();
+  }
+
   renderEditInput() {
     let styles = {
       overflow: "hidden",
@@ -222,6 +254,9 @@ class ShowCardForm extends React.Component {
         return comment;
       }
     });
+    const sortedComments = this.sortComments(comments);
+
+    const initial = this.props.username.slice(0, 2).toUpperCase();
     const dueDateUTC = this.props.card["due_date"];
     console.log(dueDateUTC);
     if (dueDateUTC) {
@@ -249,13 +284,20 @@ class ShowCardForm extends React.Component {
             editCard={this.props.editCard}
           />
           <CardIcon size="10" />
+          <MemberInitialsContainer>
+            <CommentInitials username={initial}></CommentInitials>
+          </MemberInitialsContainer>
           <CommentForm
             username={this.props.username}
             createComment={this.props.createComment}
             card={this.props.card}
           />
-          {Object.values(comments).map((comment) => (
-            <TrelloComment comment={comment} />
+          {sortedComments.map((comment) => (
+            <TrelloComment
+              comment={comment}
+              deleteComment={this.props.deleteComment}
+              editComment={this.props.editComment}
+            />
           ))}
         </HeaderContainer>
         {dueDateUTC ? localDate : null}

@@ -19,9 +19,9 @@ class Api::CommentsController < ApplicationController
 
     def update
 
-        @comment = Card.find(params[:id])
+        @comment = Comment.find(params[:id])
 
-        if @comment.update(comments_params)
+        if @comment.update(comment_params)
                 render :show
         else
                 render json: @comment.errors.full_messages, status: 422

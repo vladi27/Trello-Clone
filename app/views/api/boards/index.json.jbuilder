@@ -35,7 +35,7 @@ end
                 list.cards.each do |card|
                 card.comments.each do |comment|
                 json.set! comment.id do
-                json.extract! comment, :id, :body, :card_id, :author
+                json.extract! comment, :id, :body, :card_id, :author, :created_at, :updated_at
                 end
 end
 end
@@ -83,7 +83,7 @@ end
                 list.cards.each do |card|
                 card.comments.each do |comment|
                 json.set! comment.id do
-                json.extract! comment, :id, :body, :card_id, :author
+                json.extract! comment, :id, :body, :card_id, :author, :created_at, :updated_at
                 end
 end
 end

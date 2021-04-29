@@ -230,7 +230,6 @@ class BoardShow extends React.Component {
     };
 
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
-    this.handleSubmitInvite = this.handleSubmitInvite.bind(this);
   }
 
   componentDidMount() {
@@ -315,26 +314,6 @@ class BoardShow extends React.Component {
     const boardId = this.props.board.id;
     this.props.setActiveBoard(boardId);
     this.props.openInviteForm();
-  }
-
-  handleSubmitInvite(e) {
-    e.preventDefault();
-    const boardId = this.props.board.id;
-    const email = this.state.email;
-
-    const invitation = {
-      email,
-      user_board_id: boardId,
-    };
-
-    const createInvite = (invite) =>
-      $.ajax({
-        method: "POST",
-        url: `/api/invitations/`,
-        data: { invitation },
-      });
-
-    createInvite(invitation);
   }
 
   renderEditInput() {

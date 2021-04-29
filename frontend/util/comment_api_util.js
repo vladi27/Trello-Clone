@@ -8,14 +8,14 @@ export const createComment = (comment) =>
 export const deleteComment = (id) =>
   $.ajax({
     method: "DELETE",
-    url: `/api/comment/${id}`,
+    url: `/api/comments/${id}`,
   });
 
 export const editComment = (comment) =>
   $.ajax({
     method: "Patch",
     url: `/api/comments/${comment.id}`,
-    data: { card },
+    data: { comment },
   });
 
 export const fetchComment = (id) =>

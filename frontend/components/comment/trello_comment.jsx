@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import CommentInitials from "../card/initials";
+import Textarea from "react-textarea-autosize";
+import TrelloButton from "../trello_button";
+const moment = require("moment");
 
 const ActionComment = styled.div`
   background-color: #fff;
@@ -8,7 +12,7 @@ const ActionComment = styled.div`
   box-sizing: border-box;
   clear: both;
   display: inline-block;
-  margin: 4px 2px 4px 0;
+  margin: 4px 2px 4px -38px;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
@@ -17,24 +21,199 @@ const CurrentComment = styled.div`
   padding: 8px 12px;
 `;
 
+const CommentContainer = styled.div`
+  margin-left: 40px;
+  min-height: 32px;
+
+  position: relative;
+  padding: 8px 0 8px 48px;
+  margin: 0 0 0 -12px;
+`;
+const MemberInitialsContainer = styled.div`
+  height: 32px;
+  left: -28px;
+  position: absolute;
+  top: 8px;
+  width: 32px;
+`;
+
+const PhenomDesc = styled.div`
+  margin: 0;
+  margin-left: -35px
+  word-wrap: break-word;
+  display: block;
+`;
+
+const CommentAuthor = styled.span`
+  font-weight: 700;
+  color: #172b4d;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+`;
+
+const DateContainer = styled.span`
+  line-height: 14px;
+  margin: 0 0 6px;
+  min-width: 105px;
+  ont-size: 8px;
+  font-weight: 200;
+  white-space: pre;
+  text-decoration: none;
+`;
+
+const CommentActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  line-height: 24px;
+  margin-right: 24px;
+  margin-left: -35px;
+`;
+
+const ActionPos = styled.div`
+  align-self: flex-start;
+`;
+
+const Action = styled.span`
+  font-size: 12px;
+  margin: 0;
+  min-width: 110px;
+  margin-right: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  color: #5e6c84;
+`;
+const StyledTextArea = styled(Textarea)`
+  overflow: hidden;
+  overflow-wrap: break-word;
+  resize: none;
+  height: 50px;
+  min-height: 50px;
+  background: #fff;
+  box-shadow: none;
+  border-color: rgba(9, 30, 66, 0.13);
+  margin-bottom: 4px;
+  margin-right: 10px
+
+  width: 100%;
+`;
+
+const TextContainer = styled.div`
+  margin-left: -30px;
+`;
+
 const CommentText = styled.div``;
 
 class TrelloComment extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { body: this.props.comment.body, isEditing: false };
+  }
+
+  handleDeleteComment(e) {
+    let commentId = this.props.comment.id;
+    this.props.deleteComment(commentId);
+  }
+  handleChange(e) {
+    e.preventDefault();
+    this.setState({ body: e.currentTarget.value });
+  }
+
+  handleEditComment(e) {
+    e.preventDefault();
+    const newComment = Object.assign(
+      {},
+      {
+        body: this.state.body,
+        id: this.props.comment.id,
+      }
+    );
+    this.props
+      .editComment(newComment)
+      .then(this.setState({ isEditing: false }));
+  }
+
+  handleDate() {
+    let comment = this.props.comment;
+    let formattedDate;
+    if (new Date(comment["updated_at"]) > new Date(comment["created_at"])) {
+      console.log("updated");
+      let dateUpdated = comment["updated_at"];
+      let localDate = moment(dateUpdated).local().format("MM-DD hh:mm A");
+      formattedDate = localDate + "(edited)";
+    } else {
+      let dateCreated = this.props.comment["created_at"];
+      formattedDate = moment(dateCreated).local().format("MM-DD hh:mm A");
+    }
+    return formattedDate;
+  }
+  renderEditInput() {
+    const placeholder = "Write a comment...";
+    const text = this.state.body;
+
+    return (
+      <div>
+        <TextContainer>
+          <StyledTextArea
+            style={{ marginBottom: "2px" }}
+            autoFocus
+            value={text}
+            onChange={this.handleChange.bind(this)}
+            // onBlur={this.handleCloseForm.bind(this)}
+          />
+
+          <TrelloButton
+            disabled={this.state.body ? "true" : ""}
+            onClick={this.handleEditComment.bind(this)}
+          >
+            Save
+          </TrelloButton>
+        </TextContainer>
+      </div>
+    );
   }
 
   render() {
     let body = this.props.comment.body;
+    let initial = this.props.comment.author.slice(0, 2).toUpperCase();
+    let dateCreated = this.props.comment["created_at"];
+    const { isEditing } = this.state;
+    let localDate = moment(dateCreated).local().format("MM-DD hh:mm A");
+    let dateModified = this.handleDate();
+
     return (
-      <div>
-        <ActionComment>
-          <CurrentComment>
-            <CommentText>{body}</CommentText>
-          </CurrentComment>
-        </ActionComment>
-        ;
-      </div>
+      <CommentContainer>
+        <MemberInitialsContainer>
+          <CommentInitials username={initial}></CommentInitials>
+        </MemberInitialsContainer>
+        <PhenomDesc>
+          <CommentAuthor>{this.props.comment.author}</CommentAuthor>
+          <DateContainer> {dateModified}</DateContainer>{" "}
+        </PhenomDesc>
+        <div>
+          {isEditing ? (
+            this.renderEditInput()
+          ) : (
+            <ActionComment>
+              <CurrentComment>
+                <CommentText>{body}</CommentText>
+              </CurrentComment>
+            </ActionComment>
+          )}
+        </div>
+        <CommentActions>
+          <ActionPos>
+            <Action onClick={() => this.setState({ isEditing: true })}>
+              Edit
+            </Action>
+            <Action onClick={this.handleDeleteComment.bind(this)}>
+              Delete
+            </Action>
+          </ActionPos>
+        </CommentActions>
+      </CommentContainer>
     );
   }
 }
