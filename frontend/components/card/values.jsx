@@ -1,5 +1,12 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import { Card } from "styled-icons/boxicons-solid";
+
+const SubmitButton = styled.button`
+  cursor: pointer;
+  background: white;
+  border-radius: 4px;
+`;
 
 const CalendarValue = (props) => {
   console.log(props);
@@ -11,15 +18,16 @@ const CalendarValue = (props) => {
     const editedCard = {
       id: props.card.id,
       due_date: JSON.parse(props.children).values.date,
+      completed: false,
     };
 
     props.editCard(editedCard);
   };
 
   return (
-    <button type="submit" onClick={() => handleSubmit()}>
-      Submit
-    </button>
+    <SubmitButton type="submit" onClick={() => handleSubmit()}>
+      Schedule Due Date
+    </SubmitButton>
   );
 };
 

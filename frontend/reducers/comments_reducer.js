@@ -31,7 +31,7 @@ const cardsReducer = (state = initialState, action) => {
         return state;
       }
     case RECEIVE_BOARDS:
-      if (action.boards.cards.comments !== undefined) {
+      if (action.boards.comments !== undefined) {
         const newReceivedComments2 = action.boards.cards.comments;
         // const allComments2 = {};
         // newReceivedComments2.forEach((ele) => {

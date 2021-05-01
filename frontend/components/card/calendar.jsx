@@ -1,50 +1,3 @@
-// import React, { useState } from "react";
-// import styled from "styled-components";
-// import MomentUtils from "@date-io/moment";
-// import {
-//   DatePicker,
-//   TimePicker,
-//   DateTimePicker,
-//   MuiPickersUtilsProvider,
-// } from "@material-ui/pickers";
-
-// // import DatePicker from "react-datepicker";
-
-// // import "react-datepicker/dist/react-datepicker.css";
-
-// //CSS Modules, react-datepicker-cssmodules.css
-// // import "react-datepicker/dist/react-datepicker-cssmodules.css";
-// import Calendar from "react-calendar";
-
-// // const Calendar = () => {
-// //   const [startDate, setStartDate] = useState(new Date());
-// //   return (
-// //     <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
-// //   );
-// // };
-
-// // class Calendar extends React.Component {
-// //   constructor(props) {
-// //     super(props);
-// //     this.state = { date: "", time: "" };
-// //     this.handleFinishEditing = this.handleFinishEditing.bind(this);
-// //   }
-
-// const TrelloCalendar = () => {
-//   const [value, onChange] = useState(new Date());
-
-//   return (
-//     <div>
-//       <Calendar onChange={onChange} value={value} />
-//     </div>
-//   );
-// };
-
-// //
-// // }
-
-// export default TrelloCalendar;
-
 import React from "react";
 // import Code from "../../_shared/Code";
 import { Grid } from "@material-ui/core";
@@ -101,11 +54,26 @@ const TrelloCalendar = (props) => {
       {({ values, errors }) => (
         <Form>
           <Grid container>
-            <Grid item container justify="left" xs={12}>
+            <Grid
+              item
+              container
+              justify="center"
+              xs={15}
+              style={{ marginTop: "10px" }}
+            >
               <Field name="date" component={DatePickerField} />
             </Grid>
 
-            <Grid item xs={12} sm={12} style={{ margin: "24px" }}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              style={{
+                marginLeft: "313px",
+                marginTop: "5px",
+                justify: "center",
+              }}
+            >
               <CalendarValue
                 children={JSON.stringify({ errors, values }, null, 2)}
                 card={props.card}

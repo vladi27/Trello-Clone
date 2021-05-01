@@ -104,12 +104,13 @@ const BodyForm = styled.div`
   // border: none;
   // border-radius: 3px;
   display: block;
-      font-size: 14px;
-    line-height: 20px;
-    font-weight: 400;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
   min-height: 40px;
- // padding: 8px 12px;
+  // padding: 8px 12px;
   text-decoration: none;
   // transition: background 0.3s ease-in;
   // ${TextContainer}:hover & {
@@ -128,6 +129,11 @@ class CardDescriptionForm extends React.Component {
     // e.preventDefault();
     this.setState({ isEditing: false });
   }
+  moveCaretAtEnd(e) {
+    var temp_value = e.target.value;
+    e.target.value = "";
+    e.target.value = temp_value;
+  }
 
   handleFocus(e) {
     e.target.select();
@@ -144,11 +150,10 @@ class CardDescriptionForm extends React.Component {
       {},
       {
         body: this.state.description,
-        id: this.props.card.id
+        id: this.props.card.id,
       }
     );
     this.props.editCard(newCard).then(this.setState({ isEditing: false }));
-    //   .then((this.props.title = this.state.title));
   }
 
   renderEditInput() {
@@ -162,6 +167,7 @@ class CardDescriptionForm extends React.Component {
           placeholder={placeholder}
           autoFocus
           value={text}
+          // onFocus={this.moveCaretAtEnd.bind(this)}
           onChange={this.handleChange.bind(this)}
           onBlur={this.handleCloseForm.bind(this)}
         />

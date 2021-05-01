@@ -11,12 +11,15 @@ import {
 import CardDescriptionForm from "./card_description_form";
 import CommentInitials from "./initials";
 import TrelloCalendar from "./calendar";
+import CompletedBanner from "./completed_banner";
 import CommentForm from "../comment/comment_form";
 import TrelloComment from "../comment/trello_comment";
 import { Close } from "styled-icons/material/Close";
 import { closeModal } from "../../actions/modal_actions";
 import { CreditCard } from "styled-icons/boxicons-regular/CreditCard";
 import MomentUtils from "@date-io/moment";
+import { Clock } from "styled-icons/fa-regular/Clock";
+import Checkbox from "@material-ui/core/Checkbox";
 const moment = require("moment");
 
 import {
@@ -43,6 +46,25 @@ const HeaderContainer = styled.div`
 const CardIcon = styled(CreditCard)`
   left: -35px;
   top: 4px;
+  position: absolute;
+  color: #42526e;
+  height: 32px;
+  line-height: 20px;
+  width: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-family: trellicons;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: bottom;
+`;
+const TimeIcon = styled(Clock)`
+  left: -35px;
+
   position: absolute;
   color: #42526e;
   height: 32px;
@@ -116,7 +138,7 @@ const TitleContainer = styled.div`
 `;
 
 const StyledInput = styled.input`
-  width: 100%;
+  width: 70%;
   border: none;
   outline-color: blue;
   border-radius: 3px;
@@ -155,10 +177,86 @@ const MemberInitials = styled.span`
   width: 100%;
 `;
 
+const WindowSideBar = styled.div`
+  float: right;
+  padding: 0 16px 8px 8px;
+  width: 168px;
+  overflow: hidden;
+  z-index: 11;
+  color: #172b4d;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  margin-top: 50px;
+`;
+
+const WindowModule = styled.div`
+  clear: both;
+  // margin-bottom: 24px;
+  position: relative;
+`;
+
+const DueButton = styled.a`
+  background-color: rgba(9, 30, 66, 0.04);
+  box-shadow: none;
+  border: none;
+  border-radius: 3px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: block;
+  height: 32px;
+  margin-top: 8px;
+  max-width: 300px;
+  overflow: hidden;
+  padding: 6px 12px;
+  position: relative;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+  // transition-property: background-color, border-color, box-shadow;
+  // transition-duration: 85ms;
+  // transition-timing-function: ease;
+`;
+
+const ClockIcon = styled(Clock)`
+  // color: rgb(66, 82, 110);
+
+  // fill: inherit;
+  // flex-shrink: 0;
+  // line-height: 1;
+  margin-right: 8px;
+  margin-left: -4px;
+  // line-height: 1;
+  height: 15px;
+  width: 20px;
+  cursor: pointer;
+`;
+
+const InputContainer = styled.div`
+  cursor: pointer;
+  width: auto
+  height: 100%;
+`;
+
+const DueDate = styled.span`
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+`;
 class ShowCardForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { title: this.props.card.title, isEditing: false };
+    this.state = {
+      title: this.props.card.title,
+      isEditing: false,
+      showCalendar: false,
+    };
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
   }
 
@@ -227,6 +325,7 @@ class ShowCardForm extends React.Component {
     return (
       <form onSubmit={this.handleFinishEditing}>
         <StyledInput
+          style={styles}
           dir="auto"
           type="text"
           value={this.state.title}
@@ -246,8 +345,11 @@ class ShowCardForm extends React.Component {
 
   render() {
     const { title } = this.props.card;
+    const dueDate = this.props.card["due_date"];
+
     const list = this.props.lists[`list-${this.props.card.list_id}`];
     const { isEditing } = this.state;
+    const { showCalendar } = this.state;
     const comments = Object.values(this.props.comments).filter((comment) => {
       let cardId = this.props.card.id;
       if (cardId === comment.card_id) {
@@ -267,6 +369,41 @@ class ShowCardForm extends React.Component {
     return (
       <div>
         <CloseButton onClick={this.props.closeModal} />
+        <div>
+          {/* <h2>Due Date</h2> */}
+          <TrelloCalendar
+            card={this.props.card}
+            editCard={this.props.editCard}
+          />
+          {/* <WindowSideBar>
+            <WindowModule>
+              <h3>Add to Card</h3>
+              <InputContainer>
+                <TrelloCalendar
+                  card={this.props.card}
+                  editCard={this.props.editCard}
+                />
+              </InputContainer> */}
+
+          {/* {!showCalendar ? (
+                <InputContainer
+                  onClick={() => this.setState({ showCalendar: true })}
+                >
+                  <DueButton>
+                    <ClockIcon></ClockIcon>
+                    <DueDate>Due Date</DueDate>
+                  </DueButton>
+                </InputContainer>
+              ) : (
+                <TrelloCalendar
+                  card={this.props.card}
+                  editCard={this.props.editCard}
+                />
+              )} */}
+          {/* </WindowModule>
+          </WindowSideBar> */}
+        </div>
+
         <HeaderContainer>
           <CardIcon size="10" />
           {isEditing ? (
@@ -279,11 +416,23 @@ class ShowCardForm extends React.Component {
             </TitleContainer>
           )}
           <ModalWrapper />
+          {dueDate ? (
+            <CompletedBanner
+              editCard={this.props.editCard}
+              card={this.props.card}
+              completed={this.props.card.completed}
+            ></CompletedBanner>
+          ) : (
+            <div></div>
+          )}
+
           <CardDescriptionForm
             card={this.props.card}
             editCard={this.props.editCard}
           />
+
           <CardIcon size="10" />
+
           <MemberInitialsContainer>
             <CommentInitials username={initial}></CommentInitials>
           </MemberInitialsContainer>
@@ -300,13 +449,11 @@ class ShowCardForm extends React.Component {
             />
           ))}
         </HeaderContainer>
-        {dueDateUTC ? localDate : null}
         {/* <MuiPickersUtilsProvider utils={MomentUtils}>
           <DatePicker />
           <TimePicker />
           <DateTimePicker value={selectedDate} onChange={handleDateChange} />
         </MuiPickersUtilsProvider> */}
-        <TrelloCalendar card={this.props.card} editCard={this.props.editCard} />
       </div>
     );
   }
