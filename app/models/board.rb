@@ -5,9 +5,11 @@ class Board < ApplicationRecord
     foreign_key: :owner_id,
     class_name: :User
 
-    has_many :members, through: :memberships, source: :users
 
     has_many :memberships
+
+    has_many :members, through: :memberships, source: :user
+
 
     has_many :lists,
     foreign_key: :board_id,

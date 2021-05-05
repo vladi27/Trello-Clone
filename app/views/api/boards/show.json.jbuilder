@@ -1,7 +1,10 @@
 
 
 json.extract! @board, :title, :id, :list_positions
-json.lists do
+ json.username @owner.username
+ json.email @owner.email
+ json.members @board.members, :username, :email
+ json.lists do
      @board.lists.each do |list|
       json.set! list.id do
         json.extract! list, :id, :title, :board_id, :card_positions

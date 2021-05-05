@@ -315,6 +315,12 @@ class BoardShow extends React.Component {
     this.props.setActiveBoard(boardId);
     this.props.openInviteForm();
   }
+  handleMembersList(e) {
+    e.preventDefault();
+    const boardId = this.props.board.id;
+    this.props.setActiveBoard(boardId);
+    this.props.openMembersList();
+  }
 
   renderEditInput() {
     let styles = {
@@ -379,6 +385,9 @@ class BoardShow extends React.Component {
                 <InviteContainer onClick={this.handleInviteForm.bind(this)}>
                   <InviteButton>Invite</InviteButton>
                 </InviteContainer>
+                <InviteContainer onClick={this.handleMembersList.bind(this)}>
+                  <InviteButton>Members</InviteButton>
+                </InviteContainer>
               </BoardHeader>
               <DragDropContext onDragEnd={this.onDragEnd.bind(this)}>
                 <Droppable
@@ -439,6 +448,7 @@ const msp = (state, ownProps) => {
 
 const mdp = (dispatch) => ({
   openInviteForm: () => dispatch(openModal("open invite form")),
+  openMembersList: () => dispatch(openModal("open members list")),
   fetchBoard: (id) => dispatch(fetchBoard(id)),
   updateBoard: (board) => dispatch(updateBoard(board)),
   deleteBoard: (boardId, userId) => dispatch(deleteBoard(boardId, userId)),

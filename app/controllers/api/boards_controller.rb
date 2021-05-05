@@ -4,6 +4,7 @@ class Api::BoardsController < ApplicationController
     def create
         @board = Board.new(board_params)
         @board.owner_id = current_user.id
+        @owner = current_user
         if @board.save
             render :show
     else
@@ -12,6 +13,7 @@ class Api::BoardsController < ApplicationController
     end
 
     def index
+        @current = current_user
         @boards = current_user.owned_boards
         @shared_boards = current_user.boards
         render :index
@@ -28,6 +30,8 @@ class Api::BoardsController < ApplicationController
 
     def show
         @board = Board.find(params[:id])
+        @current = current_user
+        @owner = User.find(@board.owner_id)
         render :show
     end
 

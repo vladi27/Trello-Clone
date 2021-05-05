@@ -113,19 +113,19 @@ class InviteForm extends React.Component {
     const boardId = this.props.board.id;
     const email = this.state.email;
 
-    const invitation = {
+    const invite = {
       email,
       user_board_id: boardId,
     };
 
-    const createInvite = (invite) =>
+    const createInvite = (invitation) =>
       $.ajax({
         method: "POST",
         url: `/api/invitations/`,
         data: { invitation },
       });
 
-    createInvite(invitation);
+    createInvite(invite);
     this.props.closeModal();
   }
 

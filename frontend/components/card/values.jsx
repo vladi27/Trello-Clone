@@ -4,7 +4,8 @@ import { Card } from "styled-icons/boxicons-solid";
 
 const SubmitButton = styled.button`
   cursor: pointer;
-  background: white;
+  color: white;
+  background: #5aac44;
   border-radius: 4px;
 `;
 
