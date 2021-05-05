@@ -227,18 +227,21 @@ class BoardShow extends React.Component {
       isEditing: false,
       title: "",
       email: "",
+      board: {},
     };
 
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
   }
 
   componentDidMount() {
-    this.props.fetchBoard(this.props.match.params.boardId).then((board) =>
+    this.props.fetchBoard(this.props.match.params.boardId).then((board) => {
+      console.log(board);
       this.setState({
         title: this.props.board.title,
         isEditing: false,
-      })
-    );
+        board: board.board,
+      });
+    });
 
     // this.props.fetchAllLists(this.props.match.params.boardId);
   }
@@ -270,6 +273,17 @@ class BoardShow extends React.Component {
 
     return cards;
   }
+
+  // componentDidUpdate(prevProps) {
+  //   // Typical usage (don't forget to compare props):
+  //   if (!prevProps.board || !this.props.board) {
+  //     return;
+  //   }
+  //   console.log(this.props, prevProps);
+  //   if (this.props.board.id !== prevProps.board.id) {
+  //     this.forceUpdate();
+  //   }
+  // }
 
   handleDeleteBoard(e) {
     const boardId = this.props.board.id;
@@ -354,8 +368,9 @@ class BoardShow extends React.Component {
     if (!board) {
       return <p>Board not found</p>;
     }
+    console.log(this.state);
 
-    const listOrder = board.list_positions;
+    const listOrder = board.list_positions || [];
     //console.log(sortedLists);
 
     const allCards = this.props.cards;
@@ -437,6 +452,7 @@ class BoardShow extends React.Component {
 }
 
 const msp = (state, ownProps) => {
+  console.log(state.entities.boards[ownProps.match.params.boardId]);
   return {
     board: state.entities.boards[ownProps.match.params.boardId],
     recentActiveBoards: Object.values(state.entities.users)[0].recent_boards,

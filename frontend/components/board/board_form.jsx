@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from "react-redux";
+import { createBoard } from "../../actions/board_actions";
 import { withRouter } from "react-router-dom";
 import ls from "local-storage";
 import { Close } from "styled-icons/material/Close";
@@ -36,15 +38,18 @@ class BoardForm extends React.Component {
     const receivedUser = this.props.user;
     const userID = Number(Object.keys(receivedUser)[0]);
     const currentBoards = this.props.recentActiveBoards.slice();
-    const createBoard = board =>
+    const createBoard = (board) =>
       $.ajax({
         method: "POST",
         url: `/api/boards/`,
-        data: { board }
+        data: { board },
       });
     // .then(() => this.props.closeModal())
-    createBoard(board)
-      .then(board => {
+    this.props
+      .createBoard(board)
+      .then((payload) => {
+        console.log(board);
+        let board = payload.board;
         if (currentBoards.length > 3) {
           let currents = currentBoards.slice();
           currents.shift();
@@ -53,7 +58,7 @@ class BoardForm extends React.Component {
             {},
             {
               recent_boards: mostRecentBoards,
-              id: userID
+              id: userID,
             }
           );
           this.props.update(user);
@@ -64,7 +69,7 @@ class BoardForm extends React.Component {
             {},
             {
               recent_boards: mostRecentBoards2,
-              id: userID
+              id: userID,
             }
           );
           this.props.update(user);
@@ -102,4 +107,14 @@ class BoardForm extends React.Component {
   }
 }
 
-export default withRouter(BoardForm);
+const msp = (state) => {
+  return {};
+};
+
+const mdp = (dispatch) => ({
+  createBoard: (board) => dispatch(createBoard(board)),
+});
+
+const BoardFormWithRouter = withRouter(BoardForm);
+
+export default connect(msp, mdp)(BoardFormWithRouter);

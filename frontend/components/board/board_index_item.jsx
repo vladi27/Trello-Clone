@@ -63,7 +63,7 @@ class BoardIndexItem extends React.Component {
             {},
             {
               recent_boards: mostRecentBoards,
-              id: userID
+              id: userID,
             }
           );
           this.props.update(user);
@@ -75,7 +75,7 @@ class BoardIndexItem extends React.Component {
             {},
             {
               recent_boards: mostRecentBoards2,
-              id: userID
+              id: userID,
             }
           );
           this.props.update(user);
@@ -87,6 +87,7 @@ class BoardIndexItem extends React.Component {
   }
 
   render() {
+    // console.log(this.props.board);
     return (
       <BoardThumbnail onClick={this.handleClick}>
         <BoardTitle>{this.props.board.title}</BoardTitle>

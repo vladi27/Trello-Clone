@@ -80,7 +80,7 @@ const AllWraper = styled.div`
   position: absolute;
   width: 100%;
   z-index: 0;
-  overflow: hidden;
+  // overflow: hidden;
 `;
 
 const AllBoardsContainer = styled.div`
@@ -186,16 +186,20 @@ class BoardsIndex extends React.Component {
   }
 
   renderMostActiveBoards() {
-    const recents = this.state.recentBoards;
+    const recents = this.state.recentBoards.filter(
+      (ele) => ele !== "undefined"
+    );
     const allBoards = this.props.allBoards;
 
     console.log(allBoards);
+    console.log(recents);
 
     if (Object.values(allBoards).length < recents.length) {
       return <p>Loading...</p>;
     }
     return recents.map((id, idx) => {
       let board = allBoards[id];
+      console.log(board);
       return <BoardIndexItem board={board} key={idx} />;
     });
   }

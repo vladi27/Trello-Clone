@@ -169,7 +169,9 @@ class InviteForm extends React.Component {
               disabled={this.state.disabled}
               onClick={this.handleSubmitInvite}
               className={
-                this.state.disabled ? "submit-button-disabled" : "submit-button"
+                this.state.email.length === 0
+                  ? "submit-button-disabled"
+                  : "submit-button"
               }
             >
               Send Invite
