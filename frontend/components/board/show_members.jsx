@@ -121,9 +121,9 @@ class MembersContainer extends React.Component {
             <BoardMembersTitle>Board Members</BoardMembersTitle>
             <MembersList>
               {" "}
-              {members.map((member) => {
+              {members.map((member, idx) => {
                 return (
-                  <li style={{ listStyle: "none" }}>
+                  <li key={idx} style={{ listStyle: "none" }}>
                     <Member member={member}></Member>
                   </li>
                 );

@@ -13,7 +13,6 @@ class Api::BoardsController < ApplicationController
     end
 
     def index
-        @current = current_user
         @boards = current_user.owned_boards
         @shared_boards = current_user.boards
         render :index
@@ -30,35 +29,31 @@ class Api::BoardsController < ApplicationController
 
     def show
         @board = Board.find(params[:id])
-        @current = current_user
         @owner = User.find(@board.owner_id)
         render :show
     end
 
     def destroy
-    @board = Board.find(params[:id])
-    @board.destroy
-    head :no_content
+        @board = Board.find(params[:id])
+        @board.destroy
+        head :no_content
     end
 
     def update_lists_pos
-    @board = Board.find(params[:id])
-
-    if params[:board].key?(:list_positions)
-
-        @board.list_positions = params[:board][:list_positions]
-        @board.save
-    else
-        @board.list_positions = []
-        @board.save
-    end
-    render :show
+        @board = Board.find(params[:id])
+            if params[:board].key?(:list_positions)
+                @board.list_positions = params[:board][:list_positions]
+                @board.save
+            else
+                @board.list_positions = []
+                @board.save
+            end
+        render :show
   end
 
 
 
     def board_params
-    params.require(:board).permit(:title, {:list_positions => []}, :id)
-
+        params.require(:board).permit(:title, {:list_positions => []}, :id)
     end
 end

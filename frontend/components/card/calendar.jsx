@@ -58,7 +58,7 @@ const TrelloCalendar = (props) => {
               item
               container
               justify="center"
-              xs={15}
+              xs={12}
               style={{ marginTop: "10px" }}
             >
               <Field name="date" component={DatePickerField} />

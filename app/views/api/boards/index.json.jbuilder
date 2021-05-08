@@ -27,6 +27,7 @@ json.owned_boards
 end
 
                 end
+                end
 
 
       json.comments do
@@ -37,7 +38,7 @@ end
                 json.set! comment.id do
                 json.extract! comment, :id, :body, :card_id, :author, :created_at, :updated_at
                 end
-end
+
 end
 end
 
@@ -74,7 +75,7 @@ json.shared_boards
 end
 
                 end
-
+end
 
 
                 json.comments do
@@ -85,7 +86,7 @@ end
                 json.set! comment.id do
                 json.extract! comment, :id, :body, :card_id, :author, :created_at, :updated_at
                 end
-end
+
 end
 end
 

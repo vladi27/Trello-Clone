@@ -3,7 +3,7 @@ import {
   RECEIVE_LISTS,
   DRAG_HAPPENED,
   UPDATE_LIST,
-  REMOVE_LIST
+  REMOVE_LIST,
 } from "../actions/lists_actions";
 import { RECEIVE_BOARD, RECEIVE_BOARDS } from "../actions/board_actions";
 import { RECEIVE_CARD, REMOVE_CARD } from "../actions/cards_actions";
@@ -16,10 +16,12 @@ const listsReducer = (state = {}, action) => {
       if (action.board.lists !== undefined) {
         const newReceivedList = Object.keys(action.board.lists);
         const newList2 = {};
-        newReceivedList.forEach(ele => {
-          let numEle = Number(ele);
-          let newListKey = `list-${ele}`;
-          newList2[newListKey] = action.board.lists[numEle];
+        newReceivedList.forEach((ele) => {
+          if (ele !== "cards") {
+            let numEle = Number(ele);
+            let newListKey = `list-${ele}`;
+            newList2[newListKey] = action.board.lists[numEle];
+          }
         });
         return merge({}, state, newList2);
       } else {
@@ -31,7 +33,7 @@ const listsReducer = (state = {}, action) => {
         const allListsKeys = Object.keys(action.boards.lists);
 
         const newLists = {};
-        allListsKeys.forEach(ele => {
+        allListsKeys.forEach((ele) => {
           let numEle = Number(ele);
           let newListKey = `list-${ele}`;
           newLists[newListKey] = action.boards.lists[numEle];
@@ -70,7 +72,7 @@ const listsReducer = (state = {}, action) => {
         droppableIdEnd,
         droppableIndexEnd,
         droppableIndexStart,
-        type
+        type,
       } = action.payload;
 
       // draggin lists around - the listOrderReducer should handle this
@@ -100,7 +102,7 @@ const listsReducer = (state = {}, action) => {
         return {
           ...state,
           [`list-${droppableIdStart}`]: listStart,
-          [`list-${droppableIdEnd}`]: listEnd
+          [`list-${droppableIdEnd}`]: listEnd,
         };
       }
       return state;

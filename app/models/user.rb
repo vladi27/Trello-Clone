@@ -6,17 +6,11 @@ class User < ApplicationRecord
 
   attr_reader :password
 
-    has_many :owned_boards,
+  has_many :owned_boards,
     foreign_key: :owner_id,
     class_name: :Board
-
-    has_many :memberships
-
-    has_many :boards, through: :memberships
-
-
-
-
+  has_many :memberships
+  has_many :boards, through: :memberships
 
   after_initialize :ensure_session_token
 
@@ -30,10 +24,6 @@ class User < ApplicationRecord
     self.password_digest = BCrypt::Password.create(password)
   end
 
-  def password=(password)
-    @password = password
-    self.password_digest = BCrypt::Password.create(password)
-  end
 
   def is_password?(password)
     BCrypt::Password.new(self.password_digest).is_password?(password)

@@ -104,7 +104,7 @@ class CompletedBanner extends React.Component {
         <Badge completed={this.props.card.completed}>
           <StyledCheckbox
             checked={this.props.card.completed}
-            color="black"
+            color="default"
             onChange={this.handleChange.bind(this)}
           ></StyledCheckbox>
           <DueDateButton>{localDate}</DueDateButton>

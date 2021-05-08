@@ -441,11 +441,12 @@ class ShowCardForm extends React.Component {
             createComment={this.props.createComment}
             card={this.props.card}
           />
-          {sortedComments.map((comment) => (
+          {sortedComments.map((comment, index) => (
             <TrelloComment
               comment={comment}
               deleteComment={this.props.deleteComment}
               editComment={this.props.editComment}
+              key={index}
             />
           ))}
         </HeaderContainer>

@@ -9,10 +9,6 @@ class Api::UsersController < ApplicationController
     if @user.save
       if @token != nil
           board_id = Invitation.find_by(token:@token).user_board_id
-
-          # membership.board_id = board_id
-          # membership.user_id = @user.id
-          # membership.save
            board = Board.find(board_id)
            @user.boards.push(board)
       end
