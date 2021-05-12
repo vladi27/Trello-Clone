@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import React, { useState } from "react";
-import CommentInitials from "../card/initials";
+import CommentInitials from "../../card/initials";
 import styled from "styled-components";
 import uniqBy from "lodash/uniqBy";
 const PopOver = styled.div`
@@ -137,13 +137,9 @@ class MembersContainer extends React.Component {
 }
 
 const msp = (state) => {
-  let activeBoard = state.activeBoard;
-
-  let board = state.entities.boards[activeBoard];
-
-  const owner = {};
-  owner["username"] = board.username;
-  owner["email"] = board.email;
+  const activeBoard = state.activeBoard;
+  const board = state.entities.boards[activeBoard];
+  const owner = { username: board.username, email: board.email };
   const members = board.members.slice();
   members.push(owner);
   const uniqMembers = uniqBy(members, "email");

@@ -1,31 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import CreateNewBoardContainer from "./create_new_board_container";
-import NavBarContainer from "../nav_bar/nav_bar_container";
+import NavBarContainer from "../../nav_bar/nav_bar_container";
 import BoardIndexItem from "./board_index_item";
 import { Clock } from "styled-icons/fa-regular/Clock";
 import { User } from "styled-icons/boxicons-regular/User";
 import { UserShared } from "styled-icons/remix-line/UserShared";
-import merge from "lodash/merge";
 
 const HomeWrapper = styled.div`
-  // display: flex;
-  // align-items: center;
-  // padding-left: 64px;
-  // justify-content: center;
-  // flex-direction: column;
-  // box-sizing: border-box;
-  // // min-height: calc(100vh - 40px);
-
   width: 860px;
   flex: 1 1 100%;
-  // min-width: 352px;
   padding-left: 400px;
   padding-right: 20px;
   margin-top: 40px;
   position: relative
-
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
@@ -70,9 +57,6 @@ const RecentViewsContainer = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
     Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: 700;
-  // padding: 0 0 20px;
-
-  //top: 15px;
 `;
 
 const AllWraper = styled.div`
@@ -93,9 +77,6 @@ const AllBoardsContainer = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
     Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: 700;
-  // position: absolute;
-
-  //top: 15px;
 `;
 
 const RecentTitleContainer = styled.div`
@@ -105,38 +86,14 @@ const RecentTitleContainer = styled.div`
   display: flex;
 `;
 const AllBoards = styled.div`
-  // padding-left: 20px;
-  // padding-right: 20px;
-  // margin-top: 40px;
-  // margin-left: 200px;
-  // margin-right: 200px;
   flex: 1 1 100%;
   height: 50%;
-  // margin: 0 auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: start;
   min-width: 352px;
-  // padding-left: 20px;
   padding-right: 20px;
-  // padding-left: 64px;
-
-  // width: 0;
-  // flex: 1 1 100%;
-  // min-width: 352px;
-  // display: flex;
-  // padding-left: 20px;
-  // padding-right: 20px;
-  // margin-top: 40px;
-  // flex-direction: row;
-  // flex-wrap: wrap;
-  // overflow-y: auto;
-  // outline: none;
-  // flex-grow: 1;
-  // margin: 0 auto;
-  // max-width: 1250px;
-  // padding: 0 0 20px;
 `;
 
 class BoardsIndex extends React.Component {
@@ -151,21 +108,8 @@ class BoardsIndex extends React.Component {
   }
 
   renderBoards(type) {
-    let boards;
-    console.log(this.props);
-    if (type === "owned") {
-      boards = this.props.boards.filter((board) => {
-        if (!("shared_board" in board)) {
-          return board;
-        }
-      });
-    } else {
-      boards = this.props.boards.filter((board) => {
-        if ("shared_board" in board) {
-          return board;
-        }
-      });
-    }
+    let boards =
+      type === "shared" ? this.props.sharedBoards : this.props.ownedBoards;
 
     if (boards.length === 0) {
       return;
@@ -192,15 +136,11 @@ class BoardsIndex extends React.Component {
     );
     const allBoards = this.props.allBoards;
 
-    console.log(allBoards);
-    console.log(recents);
-
     if (Object.values(allBoards).length < recents.length) {
       return <p>Loading...</p>;
     }
     return recents.map((id, idx) => {
       let board = allBoards[id];
-      console.log(board);
       return <BoardIndexItem board={board} key={idx} />;
     });
   }

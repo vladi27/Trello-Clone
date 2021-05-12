@@ -20,12 +20,6 @@ const cardsReducer = (state = initialState, action) => {
         action.board.lists.cards.comments
       ) {
         const newReceivedComments = action.board.lists.cards.comments;
-        console.log(newReceivedComments);
-        // const allComments = {};
-        // newReceivedComments.forEach((ele) => {
-        //   let id = ele.id;
-        //   allComments[id] = ele;
-        // });
         return merge({}, state, newReceivedComments);
       } else {
         return state;
@@ -33,18 +27,10 @@ const cardsReducer = (state = initialState, action) => {
     case RECEIVE_BOARDS:
       if (action.boards.comments !== undefined) {
         const newReceivedComments2 = action.boards.cards.comments;
-        // const allComments2 = {};
-        // newReceivedComments2.forEach((ele) => {
-        //   let id = ele.id;
-        //   allComments2[id] = ele;
-        // });
         return merge({}, state, newReceivedComments2);
       } else {
         return state;
       }
-    // case RECEIVE_LIST:
-    //   const allCards = action.list.cards;
-    //   return merge({}, state, allCards);
     case RECEIVE_COMMENTS:
       return merge({}, action.comments);
     case RECEIVE_COMMENT:

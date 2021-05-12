@@ -6,7 +6,7 @@ import { AuthRoute, ProtectedRoute } from "../util/route_util";
 import GreetingContainer from "./greeting/greeting_container";
 import SignUpFormContainer from "./session_form/signup_form_container";
 import LogInFormContainer from "./session_form/login_form_container";
-import BoardsIndexContainer from "./board/board_index_container";
+import BoardsIndexContainer from "./board/board_index/board_index_container";
 import NavBarContainer from "./nav_bar/nav_bar_container";
 import BoardShow from "./board/show_board";
 import Modal from "./modal/modal";

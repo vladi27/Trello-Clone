@@ -15,7 +15,7 @@ class TrelloCreate extends React.Component {
 
     this.state = {
       formOpen: false,
-      text: ""
+      text: "",
     };
     this.openForm = this.openForm.bind(this);
     this.handleAddCard = this.handleAddCard.bind(this);
@@ -24,19 +24,19 @@ class TrelloCreate extends React.Component {
 
   openForm() {
     this.setState({
-      formOpen: true
+      formOpen: true,
     });
   }
 
   closeForm(e) {
     this.setState({
-      formOpen: false
+      formOpen: false,
     });
   }
 
   handleInputChange(e) {
     this.setState({
-      text: e.target.value
+      text: e.target.value,
     });
   }
 
@@ -47,13 +47,13 @@ class TrelloCreate extends React.Component {
 
     if (text) {
       this.setState({
-        text: ""
+        text: "",
       });
       let list = Object.assign(
         {},
         {
           board_id: boardId,
-          title: this.state.text
+          title: this.state.text,
         }
       );
 
@@ -65,18 +65,17 @@ class TrelloCreate extends React.Component {
 
   handleAddCard() {
     const { dispatch, listID } = this.props;
-    // const title = this.state.text;
     const { text } = this.state;
 
     if (text) {
       this.setState({
-        text: ""
+        text: "",
       });
       let card = Object.assign(
         {},
         {
           list_id: listID,
-          title: this.state.text
+          title: this.state.text,
         }
       );
       dispatch(createCard(card));

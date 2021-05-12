@@ -20,6 +20,7 @@ class Api::BoardsController < ApplicationController
 
     def update
         @board = Board.find(params[:id])
+        @owner = User.find(@board.owner_id)
             if @board.update(board_params)
                 render :show
             else
@@ -41,6 +42,7 @@ class Api::BoardsController < ApplicationController
 
     def update_lists_pos
         @board = Board.find(params[:id])
+        @owner = User.find(@board.owner_id)
             if params[:board].key?(:list_positions)
                 @board.list_positions = params[:board][:list_positions]
                 @board.save

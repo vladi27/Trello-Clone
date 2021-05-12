@@ -38,42 +38,26 @@ class BoardForm extends React.Component {
     const receivedUser = this.props.user;
     const userID = Number(Object.keys(receivedUser)[0]);
     const currentBoards = this.props.recentActiveBoards.slice();
-    const createBoard = (board) =>
-      $.ajax({
-        method: "POST",
-        url: `/api/boards/`,
-        data: { board },
-      });
-    // .then(() => this.props.closeModal())
     this.props
       .createBoard(board)
       .then((payload) => {
-        console.log(board);
         let board = payload.board;
+        let mostRecentArray = [];
         if (currentBoards.length > 3) {
           let currents = currentBoards.slice();
           currents.shift();
-          let mostRecentBoards = [...currents, String(board.id)];
-          let user = Object.assign(
-            {},
-            {
-              recent_boards: mostRecentBoards,
-              id: userID,
-            }
-          );
-          this.props.update(user);
+          mostRecentArray = [...currents, String(board.id)];
         } else {
-          let mostRecentBoards2 = [...currentBoards, String(board.id)];
-
-          let user = Object.assign(
-            {},
-            {
-              recent_boards: mostRecentBoards2,
-              id: userID,
-            }
-          );
-          this.props.update(user);
+          mostRecentArray = [...currentBoards, String(board.id)];
         }
+        let user = Object.assign(
+          {},
+          {
+            recent_boards: mostRecentArray,
+            id: userID,
+          }
+        );
+        this.props.update(user);
         this.props.history.push(`/boards/${board.id}`);
       })
       .then(() => this.props.closeModal());
@@ -107,14 +91,4 @@ class BoardForm extends React.Component {
   }
 }
 
-const msp = (state) => {
-  return {};
-};
-
-const mdp = (dispatch) => ({
-  createBoard: (board) => dispatch(createBoard(board)),
-});
-
-const BoardFormWithRouter = withRouter(BoardForm);
-
-export default connect(msp, mdp)(BoardFormWithRouter);
+export default BoardForm;

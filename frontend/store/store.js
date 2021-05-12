@@ -8,7 +8,6 @@ import * as APSUtil from "../util/session_api_util";
 import { receiveBoard } from "../actions/board_actions";
 import { updateCard, removeCard } from "../actions/cards_actions";
 import { receiveList } from "../actions/lists_actions";
-
 import rootReducer from "../reducers/root_reducer";
 
 const persistenceActionTypes = [
@@ -17,129 +16,114 @@ const persistenceActionTypes = [
   "RECEIVE_CARD",
   "REMOVE_CARD",
   "REMOVE_LIST",
-  "REMOVE_BOARD"
+  "REMOVE_BOARD",
 ];
-// notPersistenceActionTypes = ['ADD_ITEM_TO_CART', 'REMOVE_ITEM_FROM_CART', 'NAVIGATE']
 
-const persistenceMiddleware = store => dispatch => action => {
+//custom middleware
+const persistenceMiddleware = (store) => (dispatch) => (action) => {
   const result = dispatch(action);
 
   if (persistenceActionTypes.indexOf(action.type) > -1) {
     if (action.type === "REMOVE_BOARD") {
-      let newState = store.getState();
-      updateUser(action, newState);
+      updateUser(action, store);
     } else if (action.type === "REMOVE_LIST") {
-      let newState = store.getState();
-      removeListfromBoard(action, newState);
+      removeListfromBoard(action, store);
     } else if (action.type === "REMOVE_CARD") {
-      let newState = store.getState();
-      removeCardfromList(action, newState);
+      removeCardfromList(action, store);
     } else if (action.type === "RECEIVE_LIST") {
-      let newState = store.getState();
-      saveUpdatedBoard(action, newState);
+      saveUpdatedBoard(action, store);
     } else if (action.type === "RECEIVE_CARD") {
-      let newState = store.getState();
-      saveUpdatedList(action, newState);
+      saveUpdatedList(action, store);
     } else {
       if (action.payload.type === "list") {
-        let newState = store.getState();
-        sendToBackendBoard(action, newState);
+        sendToBackendBoard(action, store);
       } else if (
         action.payload.droppableIdStart === action.payload.droppableIdEnd &&
         action.payload.type === "card"
       ) {
-        let newState = store.getState();
-        sendToBackendSameList(action, newState);
+        sendToBackendSameList(action, store);
       } else if (
         action.payload.droppableIdStart !== action.payload.droppableIdEnd &&
         action.payload.type === "card"
       ) {
-        let newState = store.getState();
-        sendToBackendDifferentLists(action, newState);
+        sendToBackendDifferentLists(action, store);
       }
     }
   }
   return result;
 };
 
-const saveUpdatedList = (action, newState) => {
-  const updatedList3 = store.getState().entities.lists[
+const saveUpdatedList = (action, store) => {
+  const updatedList = store.getState().entities.lists[
     `list-${action.card.list_id}`
   ];
-  const list3 = Object.assign(
+  const list = Object.assign(
     {},
     {
-      id: updatedList3.id,
-      card_positions: updatedList3.card_positions
+      id: updatedList.id,
+      card_positions: updatedList.card_positions,
     }
   );
 
-  APBUtil.updateCardPositions(list3);
+  APBUtil.updateCardPositions(list);
 };
 
-const updateUser = (action, newState) => {
+const updateUser = (action, store) => {
   const user = store.getState().entities.users[action.userId];
-  const user3 = Object.assign(
+  const updatedUser = Object.assign(
     {},
     {
       id: user.id,
-      recent_boards: user.recent_boards
+      recent_boards: user.recent_boards,
     }
   );
-  APSUtil.updateRecentBoards(user3);
+  APSUtil.updateRecentBoards(updatedUser);
 };
 
-const removeCardfromList = (action, newState) => {
-  const updatedList4 = store.getState().entities.lists[`list-${action.listId}`];
-  const list4 = Object.assign(
+const removeCardfromList = (action, store) => {
+  const updatedList = store.getState().entities.lists[`list-${action.listId}`];
+  const list = Object.assign(
     {},
     {
-      id: updatedList4.id,
-      card_positions: updatedList4.card_positions
+      id: updatedList.id,
+      card_positions: updatedList.card_positions,
     }
   );
 
-  APBUtil.updateCardPositions(list4);
+  APBUtil.updateCardPositions(list);
 };
-const removeListfromBoard = (action, newState) => {
-  const updatedBoard4 = store.getState().entities.boards[action.boardId];
-  const board4 = Object.assign(
+const removeListfromBoard = (action, store) => {
+  const updatedBoard = store.getState().entities.boards[action.boardId];
+  const board = Object.assign(
     {},
     {
-      id: updatedBoard4.id,
-      list_positions: updatedBoard4.list_positions
+      id: updatedBoard.id,
+      list_positions: updatedBoard.list_positions,
     }
   );
 
-  APIUtil.updateListPositions(board4);
+  APIUtil.updateListPositions(board);
 };
 
-const saveUpdatedBoard = (action, newState) => {
+const saveUpdatedBoard = (action, store) => {
   const updatedBoard1 = store.getState().entities.boards[action.list.board_id];
   const board1 = Object.assign(
     {},
     {
       id: updatedBoard1.id,
-      list_positions: updatedBoard1.list_positions
+      list_positions: updatedBoard1.list_positions,
     }
   );
-  // déjà vu
+
   APIUtil.updateListPositions(board1);
-  // .then(checkStatus)
-  // .then(response => response.json())
-  // .then(board => {
-  //     store.dispatch(receiveBoard(board));
-  // });
-  // .catch(error => {
-  //   console.error(error);
-  //   store.dispatch(actionCreators.receiveErrors(error));
-  // });
 };
 
-const sendToBackendDifferentLists = (action, newState) => {
+const sendToBackendDifferentLists = (action, store) => {
+  //starting list
   const updatedList1 = store.getState().entities.lists[
     `list-${action.payload.droppableIdStart}`
   ];
+  // destination list
   const updatedList2 = store.getState().entities.lists[
     `list-${action.payload.droppableIdEnd}`
   ];
@@ -148,21 +132,22 @@ const sendToBackendDifferentLists = (action, newState) => {
     {},
     {
       id: updatedList1.id,
-      card_positions: updatedList1.card_positions
+      card_positions: updatedList1.card_positions,
     }
   );
   const list2 = Object.assign(
     {},
     {
       id: updatedList2.id,
-      card_positions: updatedList2.card_positions
+      card_positions: updatedList2.card_positions,
     }
   );
 
   APBUtil.updateCardPositions(list);
   APBUtil.updateCardPositions(list2);
 
-  updatedList2.card_positions.forEach(id => {
+  //updating cards' list_ids
+  updatedList2.card_positions.forEach((id) => {
     let card2 = store.getState().entities.cards[id];
 
     if (card2.list_id !== updatedList2.id) {
@@ -170,18 +155,18 @@ const sendToBackendDifferentLists = (action, newState) => {
         {},
         {
           id: card2.id,
-          list_id: updatedList2.id
+          list_id: updatedList2.id,
         }
       );
 
-      APCUtil.editCard(newCard2).then(card => {
+      APCUtil.editCard(newCard2).then((card) => {
         store.dispatch(updateCard(card));
       });
     }
   });
 };
 
-const sendToBackendSameList = (action, newState) => {
+const sendToBackendSameList = (action, store) => {
   const updatedList = store.getState().entities.lists[
     `list-${action.payload.droppableIdStart}`
   ];
@@ -189,37 +174,24 @@ const sendToBackendSameList = (action, newState) => {
     {},
     {
       id: updatedList.id,
-      card_positions: updatedList.card_positions
+      card_positions: updatedList.card_positions,
     }
   );
 
   APBUtil.updateCardPositions(list);
-
-  //   .then(list => {
-  //     store.dispatch(receiveList(list));
-  //   });
 };
 
-const sendToBackendBoard = (action, newState) => {
+const sendToBackendBoard = (action, store) => {
   const updatedBoard = store.getState().entities.boards[action.payload.boardID];
   const board = Object.assign(
     {},
     {
       id: updatedBoard.id,
-      list_positions: updatedBoard.list_positions
+      list_positions: updatedBoard.list_positions,
     }
   );
-  // déjà vu
-  APIUtil.updateListPositions(board)
-    // .then(checkStatus)
-    // .then(response => response.json())
-    .then(board => {
-      store.dispatch(receiveBoard(board));
-    });
-  // .catch(error => {
-  //   console.error(error);
-  //   store.dispatch(actionCreators.receiveErrors(error));
-  // });
+
+  APIUtil.updateListPositions(board);
 };
 
 const configureStore = (preloadedState = {}) =>

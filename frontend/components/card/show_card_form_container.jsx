@@ -1,7 +1,6 @@
 import { connect } from "react-redux";
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import Textarea from "react-textarea-autosize";
 import { editCard } from "../../actions/cards_actions";
 import {
   createComment,
@@ -10,24 +9,15 @@ import {
 } from "../../actions/comments_actions";
 import CardDescriptionForm from "./card_description_form";
 import CommentInitials from "./initials";
-import TrelloCalendar from "./calendar";
-import CompletedBanner from "./completed_banner";
+import TrelloCalendar from "./schedule_deadline/calendar";
+import CompletedBanner from "./schedule_deadline/completed_banner";
 import CommentForm from "../comment/comment_form";
 import TrelloComment from "../comment/trello_comment";
 import { Close } from "styled-icons/material/Close";
 import { closeModal } from "../../actions/modal_actions";
 import { CreditCard } from "styled-icons/boxicons-regular/CreditCard";
-import MomentUtils from "@date-io/moment";
 import { Clock } from "styled-icons/fa-regular/Clock";
-import Checkbox from "@material-ui/core/Checkbox";
 const moment = require("moment");
-
-import {
-  DatePicker,
-  TimePicker,
-  DateTimePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
 
 const ModalWrapper = styled.div`
   margin-left: 40px;
@@ -256,6 +246,7 @@ class ShowCardForm extends React.Component {
       title: this.props.card.title,
       isEditing: false,
       showCalendar: false,
+      sortedComments: [],
     };
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
   }
@@ -266,8 +257,24 @@ class ShowCardForm extends React.Component {
   }
 
   handleFocus(e) {
-    e.target.select();
+    let val = e.target.value;
+    e.target.value = "";
+    e.target.value = val;
   }
+
+  // componentDidMount() {
+  //   const comments = Object.values(this.props.comments).filter((comment) => {
+  //     let cardId = this.props.card.id;
+  //     if (cardId === comment.card_id) {
+  //       return comment;
+  //     }
+  //   });
+  //   const sortedComments = this.sortComments(comments);
+  //   console.log(sortedComments);
+  //   this.setState({
+  //     sortedComments,
+  //   });
+  // }
 
   handleChange(e) {
     e.preventDefault();
@@ -296,13 +303,10 @@ class ShowCardForm extends React.Component {
       }
     );
     this.props.editCard(newCard).then(this.setState({ isEditing: false }));
-    //   .then((this.props.title = this.state.title));
   }
 
   sortComments(dateArray) {
-    console.log(dateArray);
     let sorted = dateArray.sort((a, b) => this.desc(a, b));
-    console.log(sorted);
     return sorted;
   }
 
@@ -334,7 +338,7 @@ class ShowCardForm extends React.Component {
           onFocus={this.handleFocus}
           onBlur={this.handleCloseForm.bind(this)}
           onKeyDown={(e) => {
-            if (e.charCode == 13) {
+            if (e.key == 13) {
               this.handleFinishEditing;
             }
           }}
@@ -346,62 +350,27 @@ class ShowCardForm extends React.Component {
   render() {
     const { title } = this.props.card;
     const dueDate = this.props.card["due_date"];
-
     const list = this.props.lists[`list-${this.props.card.list_id}`];
     const { isEditing } = this.state;
-    const { showCalendar } = this.state;
     const comments = Object.values(this.props.comments).filter((comment) => {
       let cardId = this.props.card.id;
       if (cardId === comment.card_id) {
         return comment;
       }
     });
-    const sortedComments = this.sortComments(comments);
-
+    const sortedComments = this.sortComments(comments.slice());
+    // const { sortedComments } = this.state;
+    // console.log(sortedComments);
     const initial = this.props.username.slice(0, 2).toUpperCase();
-    const dueDateUTC = this.props.card["due_date"];
-    console.log(dueDateUTC);
-    if (dueDateUTC) {
-      var localDate = moment(dueDateUTC).local().format("YYYY-MM-DD hh:mm A");
-    }
-    console.log(localDate);
 
     return (
       <div>
         <CloseButton onClick={this.props.closeModal} />
         <div>
-          {/* <h2>Due Date</h2> */}
           <TrelloCalendar
             card={this.props.card}
             editCard={this.props.editCard}
           />
-          {/* <WindowSideBar>
-            <WindowModule>
-              <h3>Add to Card</h3>
-              <InputContainer>
-                <TrelloCalendar
-                  card={this.props.card}
-                  editCard={this.props.editCard}
-                />
-              </InputContainer> */}
-
-          {/* {!showCalendar ? (
-                <InputContainer
-                  onClick={() => this.setState({ showCalendar: true })}
-                >
-                  <DueButton>
-                    <ClockIcon></ClockIcon>
-                    <DueDate>Due Date</DueDate>
-                  </DueButton>
-                </InputContainer>
-              ) : (
-                <TrelloCalendar
-                  card={this.props.card}
-                  editCard={this.props.editCard}
-                />
-              )} */}
-          {/* </WindowModule>
-          </WindowSideBar> */}
         </div>
 
         <HeaderContainer>
@@ -446,15 +415,10 @@ class ShowCardForm extends React.Component {
               comment={comment}
               deleteComment={this.props.deleteComment}
               editComment={this.props.editComment}
-              key={index}
+              key={comment.id}
             />
           ))}
         </HeaderContainer>
-        {/* <MuiPickersUtilsProvider utils={MomentUtils}>
-          <DatePicker />
-          <TimePicker />
-          <DateTimePicker value={selectedDate} onChange={handleDateChange} />
-        </MuiPickersUtilsProvider> */}
       </div>
     );
   }
@@ -462,7 +426,6 @@ class ShowCardForm extends React.Component {
 
 const msp = (state) => {
   let revised = state.activeCard;
-  //console.log(revised);
   let card = state.entities.cards[revised];
   let userID = Object.keys(state.entities.users)[0];
   let username = state.entities.users[userID].username;
@@ -480,31 +443,3 @@ const mdp = (dispatch) => ({
 });
 
 export default connect(msp, mdp)(ShowCardForm);
-
-// console.log(this.props);
-// const { title } = this.props;
-// if (this.state.isEditing === false) {
-//     return (
-//         <div>
-//             <ModalWrapper>
-//                 <HeaderContainer>
-//                     <TitleContainer>
-//                         <CardTitle onClick={() => this.setState({ isEditing: true })}>
-//                             {title}
-//                         </CardTitle>
-//                     </TitleContainer>
-//                     <ListReference>{`list ${this.props.list_id}`}</ListReference>
-//                 </HeaderContainer>
-//             </ModalWrapper>
-//         </div>
-//     );
-// } else {
-//     return (
-//         <ModalWrapper>
-//             <HeaderContainer>
-//                 <TitleContainer>{this.renderEditInput()}</TitleContainer>
-//             </HeaderContainer>
-//         </ModalWrapper>
-//     );
-// }
-//   }

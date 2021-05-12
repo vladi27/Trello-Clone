@@ -9,7 +9,6 @@ import TrelloForm from "../trello_form";
 import { editCard, deleteCard } from "../../actions/cards_actions";
 import { connect } from "react-redux";
 import TrelloButton from "../trello_button";
-import ShowCardFormContainer from "./show_card_form_container";
 import { setActiveCard } from "../../actions/cards_actions";
 
 const CardContainer = styled.div`
@@ -56,22 +55,22 @@ const TrelloCard = React.memo(
     const [activeCardID, setActiveCardID] = useState(id);
     console.log(id);
 
-    const closeForm = e => {
+    const closeForm = (e) => {
       setIsEditing(false);
     };
 
-    const handleChange = e => {
+    const handleChange = (e) => {
       setText(e.target.value);
     };
 
-    const saveCard = e => {
+    const saveCard = (e) => {
       e.preventDefault();
 
       dispatch(editCard(id, listID, cardText));
       setIsEditing(false);
     };
 
-    const handleClick = id => {
+    const handleClick = (id) => {
       // console.log(id);
       setActiveCardID(id);
       // console.log(cardID);
@@ -98,7 +97,7 @@ const TrelloCard = React.memo(
     const renderCard = () => {
       return (
         <Draggable draggableId={`card-${id}`} index={index}>
-          {provided => (
+          {(provided) => (
             <CardContainer
               {...provided.draggableProps}
               {...provided.dragHandleProps}

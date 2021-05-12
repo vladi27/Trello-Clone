@@ -6,30 +6,30 @@ export const RECEIVE_LISTS = "RECEIVE_LISTS";
 export const UPDATE_LIST = "UPDATE_LIST";
 export const REMOVE_LIST = "REMOVE_LIST";
 
-export const receiveList = list => ({
+export const receiveList = (list) => ({
   type: RECEIVE_LIST,
-  list
+  list,
 });
 
 const removeList = (listId, boardId) => ({
   type: REMOVE_LIST,
   listId,
-  boardId
+  boardId,
 });
 
-export const deleteList = (listId, boardId) => dispatch =>
+export const deleteList = (listId, boardId) => (dispatch) =>
   APIUtil.deleteList(listId).then(() => dispatch(removeList(listId, boardId)));
 
-export const updateList = list => ({
+export const updateList = (list) => ({
   type: UPDATE_LIST,
-  list
+  list,
 });
 
-export const createList = list => dispatch =>
-  APIUtil.createList(list).then(list => dispatch(receiveList(list)));
+export const createList = (list) => (dispatch) =>
+  APIUtil.createList(list).then((list) => dispatch(receiveList(list)));
 
-export const editList = list => dispatch =>
-  APIUtil.updateList(list).then(list => dispatch(updateList(list)));
+export const editList = (list) => (dispatch) =>
+  APIUtil.updateList(list).then((list) => dispatch(updateList(list)));
 
 export const sort = (
   droppableIdStart,
@@ -39,7 +39,7 @@ export const sort = (
   draggableId,
   type,
   boardID
-) => dispatch =>
+) => (dispatch) =>
   dispatch({
     type: DRAG_HAPPENED,
     payload: {
@@ -49,74 +49,15 @@ export const sort = (
       droppableIndexStart,
       draggableId,
       type,
-      boardID
-    }
+      boardID,
+    },
   });
 
-// export const addList = title => {
-//     return (dispatch, getState) => {
-//         const boardID = getState().activeBoard;
-//         const id = uuid();
-//         dispatch({
-//             type: CONSTANTS.ADD_LIST,
-//             payload: { title, boardID, id }
-//         });
-//     };
-// };
-
-// export const sort = (
-//     droppableIdStart,
-//     droppableIdEnd,
-//     droppableIndexStart,
-//     droppableIndexEnd,
-//     draggableId,
-//     type
-// ) => {
-//     return (dispatch, getState) => {
-//         const boardID = getState().activeBoard;
-//         dispatch({
-//             type: CONSTANTS.DRAG_HAPPENED,
-//             payload: {
-//                 droppableIdStart,
-//                 droppableIdEnd,
-//                 droppableIndexEnd,
-//                 droppableIndexStart,
-//                 draggableId,
-//                 type,
-//                 boardID
-//             }
-//         });
-//     };
-// };
-
-// export const editTitle = (listID, newTitle) => {
-//     return {
-//         type: CONSTANTS.EDIT_LIST_TITLE,
-//         payload: {
-//             listID,
-//             newTitle
-//         }
-//     };
-// };
-
-// export const deleteList = listID => {
-//     return (dispatch, getState) => {
-//         const boardID = getState().activeBoard;
-//         return dispatch({
-//             type: CONSTANTS.DELETE_LIST,
-//             payload: {
-//                 listID,
-//                 boardID
-//             }
-//         });
-//     };
-// };
-
-export const fetchAllLists = () => dispatch => {
-  APIUtil.fetchAllLists().then(payload => dispatch(receiveLists(payload)));
+export const fetchAllLists = () => (dispatch) => {
+  APIUtil.fetchAllLists().then((payload) => dispatch(receiveLists(payload)));
 };
 
-export const receiveLists = lists => ({
+export const receiveLists = (lists) => ({
   type: RECEIVE_LISTS,
-  lists
+  lists,
 });

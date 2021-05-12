@@ -2,8 +2,8 @@ import React from "react";
 import { closeModal } from "../../actions/modal_actions";
 import { connect } from "react-redux";
 import CreateNewBoardContainer from "../board/create_new_board_container";
-import InviteFormContainer from "../board/invite_form_container";
-import MembersContainer from "../board/show_members";
+import InviteFormContainer from "../board/board_member_invite/invite_form_container";
+import MembersContainer from "../board/board_member_invite/show_members";
 import ShowCardFormContainer from "../card/show_card_form_container";
 import NavMenuContainer from "../nav_bar/nav_menu_container";
 function Modal({ modal, closeModal }) {

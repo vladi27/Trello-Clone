@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import {
   createBoard,
-  updateMostRecentBoards
+  updateMostRecentBoards,
 } from "../../actions/board_actions";
 import { openModal, closeModal } from "../../actions/modal_actions";
 import BoardForm from "./board_form";
@@ -13,25 +13,19 @@ const msp = (state, ownProps) => {
   return {
     errors: state.errors.boardErrors,
     recentActiveBoards: Object.values(state.entities.users)[0].recent_boards,
-    user: state.entities.users
+    user: state.entities.users,
   };
 };
 
-const mdp = dispatch => {
+const mdp = (dispatch) => {
   return {
-    createBoard: board => dispatch(createBoard(board)),
+    createBoard: (board) => dispatch(createBoard(board)),
     closeModal: () => dispatch(closeModal()),
-    update: user => dispatch(update(user)),
-    updateMostRecentBoards: recentBoards =>
-      dispatch(updateMostRecentBoards(recentBoards))
+    update: (user) => dispatch(update(user)),
+    updateMostRecentBoards: (recentBoards) =>
+      dispatch(updateMostRecentBoards(recentBoards)),
   };
 };
 
-// export default connect(
-//   msp,
-//   mdp
-// )(BoardForm);
-export default connect(
-  msp,
-  mdp
-)(BoardForm);
+const BoardFormWithRouter = withRouter(BoardForm);
+export default connect(msp, mdp)(BoardFormWithRouter);

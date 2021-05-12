@@ -1,6 +1,6 @@
 import {
   UPDATE_MOST_RECENT_BOARDS,
-  REMOVE_BOARD
+  REMOVE_BOARD,
 } from "../actions/board_actions";
 import { RECEIVE_CURRENT_USER } from "../actions/session_actions";
 const initialState = [];
@@ -11,7 +11,6 @@ const mostRecentBoardsReducer = (state = initialState, action) => {
     case RECEIVE_CURRENT_USER:
       return action.currentUser.recent_boards;
     case REMOVE_BOARD:
-      let st = state.recentActiveBoards;
       let idx = state.indexOf(String(action.boardId));
       state.splice(idx, 1);
       return state;

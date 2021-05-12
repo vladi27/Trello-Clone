@@ -95,8 +95,9 @@ const StyledTextArea = styled(Textarea)`
   box-shadow: none;
   border-color: rgba(9, 30, 66, 0.13);
   margin-bottom: 4px;
+  margin-top: 4px
   margin-right: 10px
-
+  padding: 0 5px
   width: 100%;
 `;
 
@@ -109,21 +110,36 @@ const CommentText = styled.div``;
 class TrelloComment extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { body: this.props.comment.body, isEditing: false };
+    this.state = { body: "", isEditing: false };
   }
 
   handleDeleteComment(e) {
     let commentId = this.props.comment.id;
     this.props.deleteComment(commentId);
   }
+
+  componentDidMount() {
+    this.setState({
+      body: this.props.comment.body,
+    });
+  }
   handleChange(e) {
     e.preventDefault();
     this.setState({ body: e.currentTarget.value });
   }
+  handleFocus(e) {
+    let val = e.target.value;
+    e.target.value = "";
+    e.target.value = val;
+  }
 
+  handleCloseForm(e) {
+    // e.preventDefault();
+    this.setState({ isEditing: false, body: this.props.comment.body });
+  }
   handleEditComment(e) {
     e.preventDefault();
-    const newComment = Object.assign(
+    let newComment = Object.assign(
       {},
       {
         body: this.state.body,
@@ -150,7 +166,6 @@ class TrelloComment extends React.Component {
     return formattedDate;
   }
   renderEditInput() {
-    const placeholder = "Write a comment...";
     const text = this.state.body;
 
     return (
@@ -160,8 +175,9 @@ class TrelloComment extends React.Component {
             style={{ marginBottom: "2px" }}
             autoFocus
             value={text}
+            onFocus={this.handleFocus}
             onChange={this.handleChange.bind(this)}
-            // onBlur={this.handleCloseForm.bind(this)}
+            onBlur={this.handleCloseForm.bind(this)}
           />
 
           <TrelloButton
@@ -178,9 +194,7 @@ class TrelloComment extends React.Component {
   render() {
     let body = this.props.comment.body;
     let initial = this.props.comment.author.slice(0, 2).toUpperCase();
-    let dateCreated = this.props.comment["created_at"];
     const { isEditing } = this.state;
-    let localDate = moment(dateCreated).local().format("MM-DD hh:mm A");
     let dateModified = this.handleDate();
 
     return (

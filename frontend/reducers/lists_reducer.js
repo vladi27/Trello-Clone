@@ -12,23 +12,24 @@ import merge from "lodash/merge";
 const listsReducer = (state = {}, action) => {
   Object.freeze(state);
   switch (action.type) {
-    case RECEIVE_BOARD:
+    case RECEIVE_BOARD: {
       if (action.board.lists !== undefined) {
         const newReceivedList = Object.keys(action.board.lists);
-        const newList2 = {};
+        const newList = {};
         newReceivedList.forEach((ele) => {
           if (ele !== "cards") {
             let numEle = Number(ele);
             let newListKey = `list-${ele}`;
-            newList2[newListKey] = action.board.lists[numEle];
+            newList[newListKey] = action.board.lists[numEle];
           }
         });
-        return merge({}, state, newList2);
+        return merge({}, state, newList);
       } else {
         return state;
       }
+    }
 
-    case RECEIVE_BOARDS:
+    case RECEIVE_BOARDS: {
       if (action.boards.lists !== undefined) {
         const allListsKeys = Object.keys(action.boards.lists);
 
@@ -42,31 +43,30 @@ const listsReducer = (state = {}, action) => {
       } else {
         return state;
       }
+    }
     case RECEIVE_LISTS:
-      // const allLists = action.lists
-      // const newAallLists.map
       return merge({}, action.lists);
-    case RECEIVE_LIST:
+    case RECEIVE_LIST: {
       const receivedList = action.list;
-
       const newList = { [`list-${receivedList.id}`]: receivedList };
       return merge({}, state, newList);
-    case UPDATE_LIST:
-      const receivedList2 = action.list;
-
-      const newList2 = { [`list-${receivedList2.id}`]: receivedList2 };
-      return merge({}, state, newList2);
-    case RECEIVE_CARD:
+    }
+    case UPDATE_LIST: {
+      const receivedList = action.list;
+      const newList = { [`list-${receivedList.id}`]: receivedList };
+      return merge({}, state, newList);
+    }
+    case RECEIVE_CARD: {
       const list = state[`list-${action.card.list_id}`];
-      // const newList = action.list.id;
       const cardOrder = list.card_positions;
       const newCardId = `card-${action.card.id}`;
       cardOrder.push(newCardId);
       list.card_positions = cardOrder;
       const updatedList = { [`list-${list.id}`]: list };
       return merge({}, state, updatedList);
+    }
 
-    case DRAG_HAPPENED:
+    case DRAG_HAPPENED: {
       const {
         droppableIdStart,
         droppableIdEnd,
@@ -83,7 +83,9 @@ const listsReducer = (state = {}, action) => {
       // in the same list
       if (droppableIdStart === droppableIdEnd) {
         const list = state[`list-${droppableIdStart}`];
+        //remove card
         const card = list.card_positions.splice(droppableIndexStart, 1);
+        //add card
         list.card_positions.splice(droppableIndexEnd, 0, ...card);
         return { ...state, [`list-${droppableIdStart}`]: list };
       }
@@ -106,18 +108,21 @@ const listsReducer = (state = {}, action) => {
         };
       }
       return state;
+    }
 
-    case REMOVE_LIST:
-      let newState = merge({}, state);
+    case REMOVE_LIST: {
+      const newState = merge({}, state);
       delete newState[`list-${action.listId}`];
       return newState;
+    }
 
-    case REMOVE_CARD:
-      const list3 = state[`list-${action.listId}`];
-      const cardIdx = list3.card_positions.indexOf(`card-${action.cardId}`);
-      list3.card_positions.splice(cardIdx, 1);
-      const updatedList3 = { [`list-${list3.id}`]: list3 };
-      return merge({}, state, updatedList3);
+    case REMOVE_CARD: {
+      const list = state[`list-${action.listId}`];
+      const cardIdx = list.card_positions.indexOf(`card-${action.cardId}`);
+      list.card_positions.splice(cardIdx, 1);
+      const updatedList = { [`list-${list.id}`]: list };
+      return merge({}, state, updatedList);
+    }
 
     default:
       return state;

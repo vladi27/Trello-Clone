@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { closeModal } from "../../actions/modal_actions";
+import { closeModal } from "../../../actions/modal_actions";
 import Textarea from "react-textarea-autosize";
 
 const InviteBox = styled.div`
@@ -32,6 +32,8 @@ const PopOverHeaderTitle = styled.span`
   border-bottom: 1px solid rgba(9, 30, 66, 0.13);
   margin: 0 12px;
   overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
   padding: 0 32px;
   position: relative;
   text-overflow: ellipsis;
@@ -70,7 +72,7 @@ const AutoCompleteSelected = styled.div`
   align-items: center;
 `;
 
-const AutoCompleteInput = styled.div`
+const AutoCompleteInput = styled.input`
   font-size: 14px;
   height: 24px;
   margin: 3px 7px 3px 0;
@@ -79,7 +81,7 @@ const AutoCompleteInput = styled.div`
   min-height: 0;
   adding: 0;
   width: auto;
-  max-width: 100%;
+  // max-width: 100%;
   background-color: transparent;
   border: none;
   box-shadow: none;
@@ -147,22 +149,12 @@ class InviteForm extends React.Component {
           <AutoCompleteContainer>
             <AutoCompleteEmpty>
               <AutoCompleteSelected>
-                <AutoCompleteInput>
-                  <input
-                    id="subtleStyle"
-                    type="email"
-                    onChange={this.updateEmail.bind(this)}
-                    placeholder="Invite"
-                  />
-                </AutoCompleteInput>
-
-                {/* <input
-                    className="disabled"
-                    id="formButton"
-                    type="submit"
-                    value="Submit Invite"
-                    disabled={this.state.disabled ? "disabled" : ""}
-                  /> */}
+                <AutoCompleteInput
+                  id="subtleStyle"
+                  type="email"
+                  onChange={this.updateEmail.bind(this)}
+                  placeholder="Invite"
+                ></AutoCompleteInput>
               </AutoCompleteSelected>
             </AutoCompleteEmpty>
             <button
@@ -179,17 +171,13 @@ class InviteForm extends React.Component {
           </AutoCompleteContainer>
         </PopOverContent>
       </InviteBox>
-      // <div className="invite-test">
-
-      // </div>
     );
   }
 }
 
-const msp = (state, ownProps) => {
-  console.log(state);
-  let activeBoard = state.activeBoard;
-  let board = state.entities.boards[activeBoard];
+const msp = (state) => {
+  const activeBoard = state.activeBoard;
+  const board = state.entities.boards[activeBoard];
   return {
     board,
   };

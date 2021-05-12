@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import ls from "local-storage";
-import { update } from "../../util/session_api_util";
+import { update } from "../../../util/session_api_util";
 
 const BoardThumbnail = styled.div`
   margin-right: 0;
@@ -10,12 +10,10 @@ const BoardThumbnail = styled.div`
   border-radius: 3px;
   display: flex;
   margin: 0 2% 8px 0;
-//   background-size: cover;
-//   background-position: 50%;
   color: #fff;
   line-height: 20px;
   padding: 8px;
- position: relative;
+  position: relative;
   text-decoration: none;
   background-color: rgb(0, 174, 204);
   cursor: pointer;
@@ -34,9 +32,6 @@ const BoardTitle = styled.h3`
   display: flex;
   height: 80px;
   flex-wrap: wrap;
-  //   position: relative;
-  //   flex-direction: column;
-  //   justify-content: space-between;
 `;
 
 class BoardIndexItem extends React.Component {
@@ -53,41 +48,30 @@ class BoardIndexItem extends React.Component {
       const userID = Number(Object.keys(receivedUser)[0]);
       const currentBoards = this.props.recentBoards.slice(-4);
 
-      //this.props.history.push(`/boards/${boardId}`);
+      //if board is not in the recent Boards array
       if (currentBoards.indexOf(String(boardId)) === -1) {
+        let mostRecentArray = [];
         if (currentBoards.length > 3) {
           let currents = currentBoards.slice();
           currents.shift();
-          let mostRecentBoards = [...currents, boardId];
-          let user = Object.assign(
-            {},
-            {
-              recent_boards: mostRecentBoards,
-              id: userID,
-            }
-          );
-          this.props.update(user);
-          //this.props.updateMostRecentBoards(mostRecentBoards);
+          mostRecentArray = [...currents, boardId];
         } else {
-          let mostRecentBoards2 = [...currentBoards, boardId];
-
-          let user = Object.assign(
-            {},
-            {
-              recent_boards: mostRecentBoards2,
-              id: userID,
-            }
-          );
-          this.props.update(user);
-          //this.props.updateMostRecentBoards(mostRecentBoards2);
+          mostRecentArray = [...currentBoards, boardId];
         }
+        let user = Object.assign(
+          {},
+          {
+            recent_boards: mostRecentArray,
+            id: userID,
+          }
+        );
+        this.props.update(user);
       }
     }
     this.props.history.push(`/boards/${boardId}`);
   }
 
   render() {
-    // console.log(this.props.board);
     return (
       <BoardThumbnail onClick={this.handleClick}>
         <BoardTitle>{this.props.board.title}</BoardTitle>

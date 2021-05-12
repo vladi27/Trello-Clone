@@ -4,7 +4,6 @@ import TrelloCreate from "../trello_create";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import CreateListContainer from "./create_list_container";
 import { editList, deleteList } from "../../actions/lists_actions";
 import Icon from "@material-ui/core/Icon";
 import { openModal } from "../../actions/modal_actions";
@@ -71,7 +70,7 @@ const TrelloList = ({
   editList,
   boardId,
   deleteList,
-  dispatch
+  dispatch,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [listTitle, setListTitle] = useState(title);
@@ -91,23 +90,23 @@ const TrelloList = ({
     );
   };
 
-  const handleFocus = e => {
+  const handleFocus = (e) => {
     e.target.select();
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     e.preventDefault();
     setListTitle(e.target.value);
   };
 
-  const handleFinishEditing = e => {
+  const handleFinishEditing = (e) => {
     e.preventDefault();
     setIsEditing(false);
     const newList = Object.assign(
       {},
       {
         title: listTitle,
-        id: listID
+        id: listID,
       }
     );
 
@@ -118,20 +117,16 @@ const TrelloList = ({
     deleteList(listID, boardId);
   };
 
-  const cards2 = cardPositions.map(pos => {
-    return allCards[pos];
-  });
-
   return (
     <Draggable draggableId={String(listID)} index={index}>
-      {provided => (
+      {(provided) => (
         <ListContainer
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
           <Droppable droppableId={String(listID)} type="card">
-            {provided => (
+            {(provided) => (
               <div>
                 <div>
                   {isEditing ? (
@@ -168,50 +163,16 @@ const TrelloList = ({
   );
 };
 
-const msp = state => {
+const msp = (state) => {
   return {
-    allCards: state.entities.cards
+    allCards: state.entities.cards,
   };
 };
 
-const mdp = dispatch => ({
+const mdp = (dispatch) => ({
   showCardForm: () => dispatch(openModal("show card form")),
-  editList: list => dispatch(editList(list)),
-  deleteList: (listId, boardId) => dispatch(deleteList(listId, boardId))
+  editList: (list) => dispatch(editList(list)),
+  deleteList: (listId, boardId) => dispatch(deleteList(listId, boardId)),
 });
 
-export default connect(
-  msp,
-  mdp
-)(TrelloList);
-
-{
-  /* <Droppable droppableId={String(listID)} type="card">
-            {provided => (
-              <div>
-                <div>
-                  {isEditing ? (
-                    renderEditInput()
-                  ) : (
-                    <TitleContainer onClick={() => setIsEditing(true)}>
-                      <ListTitle>{listTitle}</ListTitle>
-                      <DeleteButton onClick={handleDeleteList}>
-                        delete
-                      </DeleteButton>
-                    </TitleContainer>
-                  )}
-                </div>
-                {/* <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {cards.map((card, index) => (
-                    <TrelloCard
-                      key={card.id}
-                      text={card.text}
-                      id={card.id}
-                      index={index}
-                      listID={listID}
-                    />
-                  ))} */
-}
-//    </Droppable > * /}
-
-// change_column_null :table_name, :column_name, false
+export default connect(msp, mdp)(TrelloList);

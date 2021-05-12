@@ -6,7 +6,7 @@ import {
   createBoard,
   fetchAllBoards,
   fetchBoard,
-  deleteBoard
+  deleteBoard,
 } from "./util/board_api_util.js";
 import { fetchAllLists } from "./util/list_api_util";
 import { createCard } from "./util/card_api_util.js";
@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.currentUser) {
     const preloadedState = {
       entities: {
-        users: { [window.currentUser.id]: window.currentUser }
+        users: { [window.currentUser.id]: window.currentUser },
       },
-      session: { id: window.currentUser.id }
+      session: { id: window.currentUser.id },
     };
     store = configureStore(preloadedState);
     delete window.currentUser;
@@ -29,18 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // TESTING START
-  window.getState = store.getState;
-  // window.dispatch = store.dispatch;
-  // window.createBoard = createBoard;
-  // window.fetchAllBoards = fetchAllBoards;
-  // window.fetchBoard = fetchBoard;
-  // window.deleteBoard = deleteBoard;
-  // window.receiveBoards = receiveBoards;
-  // window.receiveBoard = receiveBoard;
-  // TESTING END
-  window.store = store;
-  // window.fetchAllLists = fetchAllLists;
-  // window.createCard = createCard;
+  // window.getState = store.getState;
+
+  // window.store = store;
 
   const root = document.getElementById("root");
 

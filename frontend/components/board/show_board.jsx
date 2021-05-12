@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import NavBarContainer from "../nav_bar/nav_bar_container";
 import { connect } from "react-redux";
 import {
@@ -8,20 +8,13 @@ import {
   deleteBoard,
   updateMostRecentBoards,
 } from "../../actions/board_actions";
-import {
-  logout,
-  update,
-  updateRecentBoards,
-} from "../../actions/session_actions";
+import { update } from "../../actions/session_actions";
 import { fetchAllLists } from "../../actions/lists_actions";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import CreateListContainer from "../list/create_list_container";
-import { Link } from "react-router-dom";
 import TrelloList from "../list/trello_list";
 import styled from "styled-components";
 import TrelloCreate from "../trello_create";
 import { sort } from "../../actions/lists_actions";
-import { Tgch } from "styled-icons/crypto";
 import { Delete } from "styled-icons/feather/Delete";
 import { openModal } from "../../actions/modal_actions";
 
@@ -31,14 +24,8 @@ const Content = styled.div`
   overflow-y: auto;
   outline: none;
   height: 100%;
-
-  // height: 700px;
   background: #2d90cb;
   z-index: 2;
-`;
-
-const Form = styled.form`
-  width: 100%;
 `;
 
 const PageWrapper = styled.div`
@@ -86,11 +73,9 @@ const BoardHeader = styled.div`
   background: transparent;
   display: flex;
   justify-content: start
-
-  padding: 8px 4px 4px 8px;
+  padding: 12px 4px 4px 8px;
   bottom: 10px;
   transition: padding 0.1s ease -in 0s;
-
 
 `;
 
@@ -118,8 +103,6 @@ const BoardTitleForm = styled.span`
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  // margin-left: 2px
-
   line-height: 32px;
   white-space: nowrap;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
@@ -135,13 +118,17 @@ const StyledInput = styled.input`
   font-size: 18px;
   font-weight: 700;
   line-height: 32px;
-  padding: 0;
-  width: 250px;
+  height:90%
+  padding: 0 10px;
+  height:auto
+  border: 0;
+  width: 200px;
   text-decoration: none;
   // max-width: calc(100% - 24px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  box-shadow: inset 0 0 0 2px #0079bf
 `;
 
 const MenuLink = styled.a`
@@ -185,7 +172,7 @@ const InviteContainer = styled.a`
   margin-left: 30px;
   border-radius: 3px;
   color: #fff;
-
+  height:32px
   float: left;
   font-size: 14px;
   height: 32px;
@@ -227,7 +214,6 @@ class BoardShow extends React.Component {
       isEditing: false,
       title: "",
       email: "",
-      board: {},
     };
 
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
@@ -235,15 +221,11 @@ class BoardShow extends React.Component {
 
   componentDidMount() {
     this.props.fetchBoard(this.props.match.params.boardId).then((board) => {
-      console.log(board);
       this.setState({
         title: this.props.board.title,
         isEditing: false,
-        board: board.board,
       });
     });
-
-    // this.props.fetchAllLists(this.props.match.params.boardId);
   }
 
   onDragEnd(result) {
@@ -274,23 +256,10 @@ class BoardShow extends React.Component {
     return cards;
   }
 
-  // componentDidUpdate(prevProps) {
-  //   // Typical usage (don't forget to compare props):
-  //   if (!prevProps.board || !this.props.board) {
-  //     return;
-  //   }
-  //   console.log(this.props, prevProps);
-  //   if (this.props.board.id !== prevProps.board.id) {
-  //     this.forceUpdate();
-  //   }
-  // }
-
   handleDeleteBoard(e) {
     const boardId = this.props.board.id;
     const receivedUser = this.props.user;
     const userID = Number(Object.keys(receivedUser)[0]);
-
-    const currentBoards = this.props.recentActiveBoards.slice();
     this.props
       .deleteBoard(boardId, userID)
       .then(() => this.props.history.push(`/boards/`));
@@ -307,7 +276,9 @@ class BoardShow extends React.Component {
   }
 
   handleFocus(e) {
-    e.target.select();
+    let val = e.target.value;
+    e.target.value = "";
+    e.target.value = val;
   }
 
   handleFinishEditing(e) {
@@ -320,7 +291,6 @@ class BoardShow extends React.Component {
       }
     );
     this.props.updateBoard(newBoard).then(this.setState({ isEditing: false }));
-    //   .then((this.props.title = this.state.title));
   }
 
   handleInviteForm(e) {
@@ -354,7 +324,7 @@ class BoardShow extends React.Component {
           onFocus={this.handleFocus}
           onBlur={this.handleCloseForm.bind(this)}
           onKeyDown={(e) => {
-            if (e.charCode == 13) {
+            if (e.key == 13) {
               this.handleFinishEditing;
             }
           }}
@@ -364,16 +334,11 @@ class BoardShow extends React.Component {
   }
 
   render() {
-    const board = this.props.board;
+    const { board } = this.props;
     if (!board) {
-      return <p>Board not found</p>;
+      return <p>Loading</p>;
     }
-    console.log(this.state);
-
     const listOrder = board.list_positions || [];
-    //console.log(sortedLists);
-
-    const allCards = this.props.cards;
 
     return (
       <PageWrapper>
@@ -428,10 +393,9 @@ class BoardShow extends React.Component {
                               key={list.id}
                               title={list.title}
                               cardPositions={list.card_positions}
-                              //allCards={allCards}
                               cards={cards}
                               index={index}
-                              boardId={this.props.match.params.boardId}
+                              boardId={board.id}
                             />
                           );
                         }
@@ -452,7 +416,6 @@ class BoardShow extends React.Component {
 }
 
 const msp = (state, ownProps) => {
-  console.log(state.entities.boards[ownProps.match.params.boardId]);
   return {
     board: state.entities.boards[ownProps.match.params.boardId],
     recentActiveBoards: Object.values(state.entities.users)[0].recent_boards,
