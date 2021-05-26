@@ -15,6 +15,7 @@ const StyledTextArea = styled(Textarea)`
   box-shadow: none;
   border-color: rgba(9, 30, 66, 0.13);
   margin-bottom: 4px;
+  padding: 0 5px
   margin-right: 10px
   width: 100%;
 `;
@@ -26,7 +27,6 @@ const TextContainer = styled.div`
   margin-block-start: 1em;
   margin-block-end: 1em;
   margin-inline-start: 0px;
-
   margin-inline-end: 0px;
   margin: 0 0 8px;
   cursor: pointer;
@@ -94,7 +94,6 @@ class CommentForm extends React.Component {
   }
 
   handleCloseForm(e) {
-    // e.preventDefault();
     this.setState({ isEditing: false });
   }
 

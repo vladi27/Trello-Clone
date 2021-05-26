@@ -1,15 +1,3 @@
-/* h1 {
-height: 100%;
-font-size: 38px;
-color: #333;
-margin-top: 0;
-line-height: 48px;
-font-family: "jaf-facitweb","Helvetica Neue",Arial,sans-serif;
-margin-block-start: 0.83em;
-margin-block-end: 0.83em;
-font-weight: bold
-} */
-
 input[type="submit"] {
   width: 460px;
   border-radius: 3px;
@@ -37,6 +25,7 @@ input[type="submit"].real-user {
   box-shadow: 0 2px 0 #3f6f21;
   background: #61bd4f;
   color: white;
+  cursor: pointer;
 }
 
 .section-wrapper {
@@ -109,7 +98,7 @@ input {
     width: 100%; */
 
 /* .create-account {
-    
+
   } */
 
 section {

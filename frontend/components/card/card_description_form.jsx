@@ -121,11 +121,6 @@ class CardDescriptionForm extends React.Component {
     // e.preventDefault();
     this.setState({ isEditing: false, description: this.props.card.body });
   }
-  moveCaretAtEnd(e) {
-    var temp_value = e.target.value;
-    e.target.value = "";
-    e.target.value = temp_value;
-  }
 
   handleFocus(e) {
     let val = e.target.value;
@@ -157,12 +152,10 @@ class CardDescriptionForm extends React.Component {
     return (
       <div>
         <StyledTextArea
-          // style={{ marginBottom: "4px" }}
           placeholder={placeholder}
           autoFocus
           value={text}
           onFocus={this.handleFocus}
-          // onFocus={this.moveCaretAtEnd.bind(this)}
           onChange={this.handleChange.bind(this)}
           onBlur={this.handleCloseForm.bind(this)}
         />
@@ -211,52 +204,6 @@ class CardDescriptionForm extends React.Component {
         <div>{isEditing ? this.renderEditInput() : descriptionRender}</div>
       </FormWrapper>
     );
-
-    // if (description) {
-    //   return (
-    //     <FormWrapper>
-    //       <HeaderContainer>
-    //         <MenuIcon />
-    //         <HeaderTitle>Description</HeaderTitle>
-    //       </HeaderContainer>
-    //       <div>
-    //         {isEditing ? (
-    //           this.renderEditInput()
-    //         ) : (
-    //           <CardContainer
-    //             dir="auto"
-    //             onClick={() => this.setState({ isEditing: true })}
-    //           >
-    //             <CardDescription dir="auto">{description}</CardDescription>
-    //           </CardContainer>
-    //         )}
-    //       </div>
-    //     </FormWrapper>
-    //   );
-    // } else {
-    //   return (
-    //     <div>
-    //       <FormWrapper>
-    //         <HeaderContainer>
-    //           <MenuIcon />
-    //           <HeaderTitle>Description</HeaderTitle>
-    //         </HeaderContainer>
-
-    //         {isEditing ? (
-    //           this.renderEditInput()
-    //         ) : (
-    //           <TextContainer>
-    //             <BorderFormContainer
-    //               onClick={() => this.setState({ isEditing: true })}
-    //             >
-    //               <BodyForm>Add a more detailed description...</BodyForm>
-    //             </BorderFormContainer>
-    //           </TextContainer>
-    //         )}
-    //       </FormWrapper>
-    //     </div>
-    //   );
-    // }
   }
 }
 

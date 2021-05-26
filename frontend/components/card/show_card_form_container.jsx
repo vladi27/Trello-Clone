@@ -17,7 +17,6 @@ import { Close } from "styled-icons/material/Close";
 import { closeModal } from "../../actions/modal_actions";
 import { CreditCard } from "styled-icons/boxicons-regular/CreditCard";
 import { Clock } from "styled-icons/fa-regular/Clock";
-const moment = require("moment");
 
 const ModalWrapper = styled.div`
   margin-left: 40px;
@@ -54,7 +53,6 @@ const CardIcon = styled(CreditCard)`
 `;
 const TimeIcon = styled(Clock)`
   left: -35px;
-
   position: absolute;
   color: #42526e;
   height: 32px;
@@ -108,23 +106,11 @@ const ListReference = styled.div`
   position: relative;
 `;
 
-const FakeFocus = styled.a``;
-
 const TitleContainer = styled.div`
-  //   width: 100%;
-  //   height: 100%;
-  //   display: flex;
-  //   justify-content: space-between;
-  //   align-items: center;
-  //   cursor: pointer;
-
-  // margin: 12px 40px 8px 56px;
+  cursor: pointer;
   min-height: 32px;
   padding: 8px 0 0;
-  //   //cursor: pointer;
-
   margin: 4px 0 0;
-  //   padding: 8px 0 0;
 `;
 
 const StyledInput = styled.input`
@@ -132,14 +118,10 @@ const StyledInput = styled.input`
   border: none;
   outline-color: blue;
   border-radius: 3px;
-  //   margin-bottom: 3px;
-  // padding: 5px;
   background: #fff;
-  //   border-radius: 3px;
   box-shadow: none;
   font-size: 20px;
   font-weight: 600;
-
   line-height: 24px;
   margin: -4px -8px;
   min-height: 24px;
@@ -153,92 +135,6 @@ const MemberInitialsContainer = styled.div`
   left: -40px;
 `;
 
-const MemberInitials = styled.span`
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  height: 32px;
-  left: 0;
-  line-height: 32px;
-  overflow: hidden;
-  position: absolute;
-  text-align: center;
-  top: 0;
-  width: 100%;
-`;
-
-const WindowSideBar = styled.div`
-  float: right;
-  padding: 0 16px 8px 8px;
-  width: 168px;
-  overflow: hidden;
-  z-index: 11;
-  color: #172b4d;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
-    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  margin-top: 50px;
-`;
-
-const WindowModule = styled.div`
-  clear: both;
-  // margin-bottom: 24px;
-  position: relative;
-`;
-
-const DueButton = styled.a`
-  background-color: rgba(9, 30, 66, 0.04);
-  box-shadow: none;
-  border: none;
-  border-radius: 3px;
-  box-sizing: border-box;
-  cursor: pointer;
-  display: block;
-  height: 32px;
-  margin-top: 8px;
-  max-width: 300px;
-  overflow: hidden;
-  padding: 6px 12px;
-  position: relative;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  -webkit-user-select: none;
-  user-select: none;
-  white-space: nowrap;
-  // transition-property: background-color, border-color, box-shadow;
-  // transition-duration: 85ms;
-  // transition-timing-function: ease;
-`;
-
-const ClockIcon = styled(Clock)`
-  // color: rgb(66, 82, 110);
-
-  // fill: inherit;
-  // flex-shrink: 0;
-  // line-height: 1;
-  margin-right: 8px;
-  margin-left: -4px;
-  // line-height: 1;
-  height: 15px;
-  width: 20px;
-  cursor: pointer;
-`;
-
-const InputContainer = styled.div`
-  cursor: pointer;
-  width: auto
-  height: 100%;
-`;
-
-const DueDate = styled.span`
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-`;
 class ShowCardForm extends React.Component {
   constructor(props) {
     super(props);
@@ -252,7 +148,6 @@ class ShowCardForm extends React.Component {
   }
 
   handleCloseForm(e) {
-    // e.preventDefault();
     this.setState({ isEditing: false });
   }
 
@@ -262,35 +157,9 @@ class ShowCardForm extends React.Component {
     e.target.value = val;
   }
 
-  // componentDidMount() {
-  //   const comments = Object.values(this.props.comments).filter((comment) => {
-  //     let cardId = this.props.card.id;
-  //     if (cardId === comment.card_id) {
-  //       return comment;
-  //     }
-  //   });
-  //   const sortedComments = this.sortComments(comments);
-  //   console.log(sortedComments);
-  //   this.setState({
-  //     sortedComments,
-  //   });
-  // }
-
   handleChange(e) {
     e.preventDefault();
     this.setState({ title: e.currentTarget.value });
-  }
-  convertUTCDateToLocalDate(date) {
-    var newDate = new Date(
-      date.getTime() + date.getTimezoneOffset() * 60 * 1000
-    );
-
-    var offset = date.getTimezoneOffset() / 60;
-    var hours = date.getHours();
-
-    newDate.setHours(hours - offset);
-
-    return newDate;
   }
 
   handleFinishEditing(e) {
@@ -324,7 +193,7 @@ class ShowCardForm extends React.Component {
     let styles = {
       overflow: "hidden",
       overflowWrap: "break-word",
-      height: "32px",
+      height: "25px",
     };
     return (
       <form onSubmit={this.handleFinishEditing}>
@@ -359,8 +228,7 @@ class ShowCardForm extends React.Component {
       }
     });
     const sortedComments = this.sortComments(comments.slice());
-    // const { sortedComments } = this.state;
-    // console.log(sortedComments);
+    const username = this.props.username;
     const initial = this.props.username.slice(0, 2).toUpperCase();
 
     return (
@@ -410,7 +278,7 @@ class ShowCardForm extends React.Component {
             createComment={this.props.createComment}
             card={this.props.card}
           />
-          {sortedComments.map((comment, index) => (
+          {sortedComments.map((comment) => (
             <TrelloComment
               comment={comment}
               deleteComment={this.props.deleteComment}

@@ -4,51 +4,41 @@ import styled from "styled-components";
 import { HomeAlt } from "styled-icons/boxicons-regular/HomeAlt";
 import { LogOut } from "styled-icons/boxicons-regular/LogOut";
 import { Plus } from "styled-icons/boxicons-regular/Plus";
-import Avatar from "@material-ui/core/Avatar";
 import AvatarContainer from "./avatar_container";
 
 const NavContainer = styled.div`
-    box-sizing: border-box;
-    display: flex;
-    min-height: 50px;
-    justify-content: space-between
-    overflow: hidden;
-    padding: 4px;
-    z-index: 10;
-    height: 32px;
-    position: relative;
-    background: #026aa7;
-}
+  box-sizing: border-box;
+  display: flex;
+  min-height: 50px;
+  justify-content: space-between
+  overflow: hidden;
+  padding: 4px;
+  z-index: 10;
+  height: 32px;
+  position: relative;
+  background: #026aa7;
 `;
 
-// const AvatarIcon = styled(Avatar)`
-//   margin: 10;
-//   background-color: red;
-// `;
-
 const PlusIcon = styled(Plus)`
-     color: #fff;
-        font-size: 20px;
-        height: 30px;
-        padding: 2px
-    line-height: 30px;
-    width: 32px;
--webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    display: inline-block;
-    font-family: trellicons;
-    font-style: normal;
-
-    font-weight: 400;
-      white-space: nowrap;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: bottom;
-     ${MenuLink}:hover & {
-    background: rgba(0, 0, 0, 0.18);
-  }
+  color: #fff;
+  font-size: 20px;
+  height: 30px;
+  padding: 2px
+  line-height: 30px;
+  width: 32px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-family: trellicons;
+  font-style: normal;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: bottom;
+  ${MenuLink}:hover & {
+  background: rgba(0, 0, 0, 0.18);
 }
-
 `;
 
 const MenuLink = styled.a`
@@ -68,41 +58,17 @@ const MenuLink = styled.a`
   font-weight: 700;
   height: 32px;
   line-height: 32px;
-  margin: 4px 10px 0 0;
-  // padding: 2px;
+  margin: 4px 10px 0 2px;
+  // padding-left: 2px;
   transition: 0.1s ease;
   white-space: nowrap;
-`;
-
-const LogOutIcon = styled(LogOut)`
-    color: #fff;
-        font-size: 20px;
-        height: 30px;
-        padding: 2px
-    line-height: 30px;
-    width: 32px;
--webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    display: inline-block;
-    font-family: trellicons;
-    font-style: normal;
-   
-    font-weight: 400;
-      white-space: nowrap;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: bottom;
-     ${MenuLink}:hover & {
-    background: rgba(0, 0, 0, 0.18);
-  }
-}
 `;
 
 const HomeIcon = styled(HomeAlt)`
   color: #fff;
   font-size: 20px;
   height: 30px;
-   padding: 2px
+  padding: 2px
   line-height: 30px;
   width: 32px;
   -webkit-font-smoothing: antialiased;
@@ -145,10 +111,6 @@ class NavBar extends React.Component {
           <MenuLink href="#/boards">
             <HomeIcon />
           </MenuLink>
-
-          {/* <MenuLink onClick={this.props.logout}>
-            <LogOutIcon />
-          </MenuLink> */}
         </NavLeft>
         <div className="center-nav">
           <Link className="center-logo" to={`/`}>
@@ -171,37 +133,3 @@ class NavBar extends React.Component {
 }
 
 export default NavBar;
-
-{
-  /* <div id="header" className="nav-bar">
-  <div className="nav-buttons-left">
-    <Link to={`/boards`} className="nav-icon">
-      <span className="icon-props">
-        <i class="fas fa-home" />
-      </span>
-    </Link>
-  </div>
-  <div className="nav-buttons-right">
-    <button className="nav-icon" onClick={this.props.logout}>
-      Logout
-          </button>
-    <button className="nav-icon" onClick={this.props.logout}>
-      <span className="icon-props">+</span>
-    </button>
-    <Link to={`/boards`} className="nav-icon">
-      <span className="icon-props">
-        <i class="fas fa-sign-out-alt" />
-      </span>
-    </Link>
-  </div>
-  <div className="center-nav">
-    <Link className="center-logo" to={`/`}>
-      <i class="fab fa-trello" />
-      Yello
-          </Link>
-  </div>
-</div>
-    );
-  }
-} */
-}

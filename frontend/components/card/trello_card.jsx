@@ -53,7 +53,6 @@ const TrelloCard = React.memo(
     const [isEditing, setIsEditing] = useState(false);
     const [cardText, setText] = useState(title);
     const [activeCardID, setActiveCardID] = useState(id);
-    console.log(id);
 
     const closeForm = (e) => {
       setIsEditing(false);
@@ -65,15 +64,12 @@ const TrelloCard = React.memo(
 
     const saveCard = (e) => {
       e.preventDefault();
-
       dispatch(editCard(id, listID, cardText));
       setIsEditing(false);
     };
 
     const handleClick = (id) => {
-      // console.log(id);
       setActiveCardID(id);
-      // console.log(cardID);
       dispatch(setActiveCard(id));
       showCardForm();
     };

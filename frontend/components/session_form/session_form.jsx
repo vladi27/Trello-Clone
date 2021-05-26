@@ -73,7 +73,6 @@ class SessionForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     let params = queryString.parse(this.props.location.search);
-    console.log(params);
     let { password, email, username } = this.state;
     const newUser = {
       password,

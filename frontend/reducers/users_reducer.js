@@ -1,9 +1,5 @@
 import merge from "lodash/merge";
-
-import {
-  RECEIVE_CURRENT_USER,
-  UPDATE_RECENT_BOARDS
-} from "../actions/session_actions";
+import { RECEIVE_CURRENT_USER } from "../actions/session_actions";
 import { REMOVE_BOARD } from "../actions/board_actions";
 
 const usersReducer = (state = {}, action) => {
@@ -12,7 +8,6 @@ const usersReducer = (state = {}, action) => {
       return merge({}, state, { [action.currentUser.id]: action.currentUser });
     case REMOVE_BOARD:
       let user = state[action.userId];
-
       let recents = user.recent_boards;
       let idx = recents.indexOf(String(action.boardId));
       recents.splice(idx, 1);

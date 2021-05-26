@@ -8,8 +8,6 @@ const useStyles = makeStyles({
     margin: 10,
   },
   orangeAvatar: {
-    // margin: 10,
-    // color: "#fff",
     backgroundColor: deepOrange[500],
     cursor: "pointer",
   },
@@ -20,12 +18,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function LetterAvatars(props) {
+const LetterAvatars = (props) => {
   const classes = useStyles();
-
   return (
     <Avatar onClick={props.openMenuModal} className={classes.orangeAvatar}>
       {props.username}
     </Avatar>
   );
-}
+};
+export default LetterAvatars;
