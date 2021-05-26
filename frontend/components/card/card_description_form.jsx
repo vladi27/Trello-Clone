@@ -108,8 +108,6 @@ const BodyForm = styled.div`
   text-decoration: none;
 `;
 
-const DescriptionComponent = () => {};
-
 class CardDescriptionForm extends React.Component {
   constructor(props) {
     super(props);
@@ -118,7 +116,6 @@ class CardDescriptionForm extends React.Component {
   }
 
   handleCloseForm(e) {
-    // e.preventDefault();
     this.setState({ isEditing: false, description: this.props.card.body });
   }
 

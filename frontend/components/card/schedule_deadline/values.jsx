@@ -10,12 +10,7 @@ const SubmitButton = styled.button`
 `;
 
 const CalendarValue = (props) => {
-  console.log(props);
-  console.log(JSON.parse(props.children).values.date);
-
   const handleSubmit = () => {
-    console.log(JSON.parse(props.children).values.date);
-
     const editedCard = {
       id: props.card.id,
       due_date: JSON.parse(props.children).values.date,

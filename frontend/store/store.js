@@ -194,11 +194,10 @@ const sendToBackendBoard = (action, store) => {
   APIUtil.updateListPositions(board);
 };
 
-const configureStore = (preloadedState = {}) =>
-  createStore(
-    rootReducer,
-    preloadedState,
-    applyMiddleware(thunk, logger, persistenceMiddleware)
-  );
+const configureStore = (preloadedState = {}) => {
+  const middleware = [thunk, logger, persistenceMiddleware].filter(Boolean);
+  const createStoreWithMiddleware = applyMiddleware(...middleware);
+  return createStore(rootReducer, preloadedState, createStoreWithMiddleware);
+};
 
 export default configureStore;

@@ -192,9 +192,11 @@ class TrelloComment extends React.Component {
   }
 
   render() {
-    let body = this.props.comment.body;
-    let initial = this.props.comment.author.slice(0, 2).toUpperCase();
-    const { isEditing } = this.state;
+    const body = this.props.comment.body;
+    const author = this.props.comment.author;
+    const initial = author.slice(0, 2).toUpperCase();
+    const { username } = this.props;
+    let { isEditing } = this.state;
     let dateModified = this.handleDate();
 
     return (
@@ -217,16 +219,22 @@ class TrelloComment extends React.Component {
             </ActionComment>
           )}
         </div>
-        <CommentActions>
-          <ActionPos>
-            <Action onClick={() => this.setState({ isEditing: true })}>
-              Edit
-            </Action>
-            <Action onClick={this.handleDeleteComment.bind(this)}>
-              Delete
-            </Action>
-          </ActionPos>
-        </CommentActions>
+        <div>
+          {username === author ? (
+            <CommentActions>
+              <ActionPos>
+                <Action onClick={() => this.setState({ isEditing: true })}>
+                  Edit
+                </Action>
+                <Action onClick={this.handleDeleteComment.bind(this)}>
+                  Delete
+                </Action>
+              </ActionPos>
+            </CommentActions>
+          ) : (
+            <div></div>
+          )}
+        </div>
       </CommentContainer>
     );
   }

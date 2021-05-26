@@ -229,7 +229,7 @@ class ShowCardForm extends React.Component {
     });
     const sortedComments = this.sortComments(comments.slice());
     const username = this.props.username;
-    const initial = this.props.username.slice(0, 2).toUpperCase();
+    const initial = username.slice(0, 2).toUpperCase();
 
     return (
       <div>
@@ -283,6 +283,7 @@ class ShowCardForm extends React.Component {
               comment={comment}
               deleteComment={this.props.deleteComment}
               editComment={this.props.editComment}
+              username={username}
               key={comment.id}
             />
           ))}
