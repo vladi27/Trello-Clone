@@ -31,7 +31,6 @@ export const deleteBoard = (boardId, userId) => (dispatch) =>
   );
 
 export const receiveBoards = (boards) => {
-  console.log(boards);
   return {
     type: RECEIVE_BOARDS,
     boards,

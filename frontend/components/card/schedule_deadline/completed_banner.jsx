@@ -79,7 +79,6 @@ class CompletedBanner extends React.Component {
   }
   handleChange(e) {
     e.preventDefault();
-    console.log(e.target.checked);
     let currentState = e.target.checked;
 
     const newCard = Object.assign(
@@ -95,7 +94,6 @@ class CompletedBanner extends React.Component {
   render() {
     const dueDateUTC = this.props.card["due_date"];
     const localDate = moment(dueDateUTC).local().format("YYYY-MM-DD hh:mm A");
-    console.log(localDate);
     const { checked } = this.state;
 
     return (

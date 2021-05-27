@@ -156,7 +156,6 @@ class TrelloComment extends React.Component {
     let comment = this.props.comment;
     let formattedDate;
     if (new Date(comment["updated_at"]) > new Date(comment["created_at"])) {
-      console.log("updated");
       let dateUpdated = comment["updated_at"];
       let localDate = moment(dateUpdated).local().format("MM-DD hh:mm A");
       formattedDate = localDate + "(edited)";
