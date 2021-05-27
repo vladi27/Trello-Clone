@@ -1,3 +1,5 @@
+require 'terser'
+Sprockets.register_compressor 'application/javascript', :terser, Terser::Compressor
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -13,6 +15,8 @@ Rails.application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
+  # config.secret_key_base = ENV["SECRET_KEY_BASE"]
+  # config.secret_key_base = 'blipblapblup'
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
@@ -23,8 +27,8 @@ Rails.application.configure do
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  # config.assets.js_compressor = :uglifier
+  # config.assets.js_compressor = Uglifier.new(harmony: true)
 
   # config.assets.css_compressor = :sass
 
@@ -92,7 +96,9 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
-  config.assets.js_compressor = Uglifier.new(:harmony => true)
+
+  config.assets.js_compressor = :terser
+  #  config.assets.js_compressor = Uglifier.new(:harmony => true)
 
 
   # Use default logging formatter so that PID and timestamp are not suppressed.

@@ -59,10 +59,6 @@ const BodyForm = styled.div`
   min-height: 40px;
   // padding: 8px 12px;
   text-decoration: none;
-  // transition: background 0.3s ease-in;
-  // ${TextContainer}:hover & {
-  //   background: #ccc;
-  // }
 `;
 
 class CommentForm extends React.Component {

@@ -11,7 +11,7 @@ const InviteBox = styled.div`
   overflow: visible;
   background: #fff;
   border-radius: 3px;
-  box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
+  // box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
   position: absolute;
   right: -9999px;
   z-index: 70;

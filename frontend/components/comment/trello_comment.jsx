@@ -3,7 +3,8 @@ import styled from "styled-components";
 import CommentInitials from "../card/initials";
 import Textarea from "react-textarea-autosize";
 import TrelloButton from "../trello_button";
-const moment = require("moment");
+import moment from "moment";
+// const moment = require("moment");
 
 const ActionComment = styled.div`
   background-color: #fff;

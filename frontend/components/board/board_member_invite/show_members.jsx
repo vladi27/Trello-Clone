@@ -8,7 +8,7 @@ const PopOver = styled.div`
   left: 50%;
   background: #fff;
   border-radius: 3px;
-  box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
+  // box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
   overflow: hidden;
   position: absolute;
   right: -9999px;

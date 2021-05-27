@@ -28,6 +28,8 @@ gem 'jbuilder', '~> 2.5'
  gem "cancan"
 
  gem "figaro"
+ gem "terser"
+ gem 'sassc-rails'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'

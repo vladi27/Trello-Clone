@@ -59,7 +59,7 @@ const TrelloCalendar = (props) => {
               style={{
                 marginLeft: "313px",
                 marginTop: "5px",
-                justifyContent: "center;",
+                justifyContent: "center",
               }}
             >
               <CalendarValue

@@ -132,7 +132,6 @@ const StyledInput = styled.input`
 `;
 
 const MenuLink = styled.a`
-  // color: rgb(255, 255, 255);
   cursor: pointer;
   float: left;
   margin-left: 30px;
