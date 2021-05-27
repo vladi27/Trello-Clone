@@ -203,9 +203,9 @@ const sendToBackendBoard = (action, store) => {
 
 const configureStore = (preloadedState = {}) => {
   let middleware = [thunk, persistenceMiddleware];
-  if (process.env.NODE_ENV !== "production") {
-    middleware = [...middleware, logger];
-  }
+  // if (process.env.NODE_ENV !== "production") {
+  //   middleware = [...middleware, logger];
+  // }
   // const middleware = [thunk, logger, persistenceMiddleware].filter(Boolean);
   const createStoreWithMiddleware = applyMiddleware(...middleware);
   return createStore(rootReducer, preloadedState, createStoreWithMiddleware);
