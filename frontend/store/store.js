@@ -194,8 +194,19 @@ const sendToBackendBoard = (action, store) => {
   APIUtil.updateListPositions(board);
 };
 
+// let middleware = [a, b];
+// if (process.env.NODE_ENV !== "production") {
+//   const c = require("some-debug-middleware");
+//   const d = require("another-debug-middleware");
+//   middleware = [...middleware, c, d];
+// }
+
 const configureStore = (preloadedState = {}) => {
-  const middleware = [thunk, logger, persistenceMiddleware].filter(Boolean);
+  let middleware = [thunk, persistenceMiddleware];
+  if (process.env.NODE_ENV !== "production") {
+    middleware = [...middleware, logger];
+  }
+  // const middleware = [thunk, logger, persistenceMiddleware].filter(Boolean);
   const createStoreWithMiddleware = applyMiddleware(...middleware);
   return createStore(rootReducer, preloadedState, createStoreWithMiddleware);
 };
