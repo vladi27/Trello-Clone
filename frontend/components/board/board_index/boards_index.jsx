@@ -134,6 +134,7 @@ class BoardsIndex extends React.Component {
     const recents = this.state.recentBoards.filter(
       (ele) => ele !== "undefined"
     );
+
     const allBoards = this.props.allBoards;
 
     if (Object.values(allBoards).length < recents.length) {
@@ -141,7 +142,10 @@ class BoardsIndex extends React.Component {
     }
     return recents.map((id, idx) => {
       let board = allBoards[id];
-      return <BoardIndexItem board={board} key={idx} />;
+      console.log(board);
+      if (board) {
+        return <BoardIndexItem board={board} key={idx} />;
+      }
     });
   }
 

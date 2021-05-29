@@ -25,12 +25,12 @@ const boardsReducer = (obj = {}, action) => {
       const newBoardtoReturn = { [action.board.id]: action.board };
       return merge({}, obj, newBoardtoReturn);
     }
-    case REMOVE_BOARD:
-      {
-        const nextState = merge({}, obj);
-        delete nextState[action.boardId];
-      }
+    case REMOVE_BOARD: {
+      const nextState = merge({}, obj);
+      delete nextState[action.boardId];
       return nextState;
+    }
+
     case REMOVE_LIST: {
       const board = obj[action.boardId];
       const listIdx = board.list_positions.indexOf(`list-${action.listId}`);
