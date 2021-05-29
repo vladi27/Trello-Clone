@@ -142,7 +142,6 @@ class BoardsIndex extends React.Component {
     }
     return recents.map((id, idx) => {
       let board = allBoards[id];
-      console.log(board);
       if (board) {
         return <BoardIndexItem board={board} key={idx} />;
       }
