@@ -12,7 +12,7 @@ const PopOver = styled.div`
   overflow: hidden;
   position: absolute;
   right: -9999px;
-  width: 304px;
+  width: 350px;
   z-index: 70;
   -webkit-transform: translateZ(0);
 `;
