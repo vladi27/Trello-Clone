@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { Grid } from "@material-ui/core";
 import { Formik, Form, Field, useFormik } from "formik";
 import {
@@ -10,12 +11,18 @@ import {
 import CalendarValue from "./values";
 import DateFnsUtils from "@date-io/date-fns";
 
+const StyledDatePickerField = styled(DateTimePicker)`
+  & * {
+    cursor: pointer;
+  }
+`;
+
 const DatePickerField = ({ field, form, ...other }) => {
   const currentError = form.errors[field.name];
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <DateTimePicker
+      <StyledDatePickerField
         clearable
         disablePast
         name={field.name}
@@ -49,7 +56,13 @@ const TrelloCalendar = (props) => {
               xs={12}
               style={{ marginTop: "10px" }}
             >
-              <Field name="date" component={DatePickerField} />
+              <Field
+                name="date"
+                component={DatePickerField}
+                style={{
+                  cursor: "pointer",
+                }}
+              />
             </Grid>
 
             <Grid

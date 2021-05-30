@@ -82,6 +82,7 @@ const MemberLink = styled.div`
 const FullName = styled.span`
   line-height: 32px;
   white-space: nowrap;
+  font-size: 15px;
 `;
 
 const InitialContainer = styled.span`

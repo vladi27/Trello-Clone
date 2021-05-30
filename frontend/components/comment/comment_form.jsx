@@ -141,18 +141,3 @@ class CommentForm extends React.Component {
 }
 
 export default CommentForm;
-
-// <div>
-//   <StyledTextArea
-//     style={{ marginBottom: "4px" }}
-//     placeholder="Add a comment"
-//     autoFocus
-//     value={text}
-//     onChange={this.handleChange.bind(this)}
-//     //   onBlur={this.handleCloseForm.bind(this)}
-//   />
-
-//   <TrelloButton onClick={this.handleNewComment.bind(this)}>
-//     Save
-//   </TrelloButton>
-// </div>
