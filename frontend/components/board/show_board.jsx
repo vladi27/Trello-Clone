@@ -271,7 +271,21 @@ class BoardShow extends React.Component {
 
   handleCloseForm(e) {
     // e.preventDefault();
-    this.setState({ isEditing: false });
+    const currentTitle = this.props.board.title;
+    if (this.state.title !== currentTitle) {
+      const newBoard = Object.assign(
+        {},
+        {
+          title: this.state.title,
+          id: this.props.board.id,
+        }
+      );
+      this.props
+        .updateBoard(newBoard)
+        .then(this.setState({ isEditing: false }));
+    } else {
+      this.setState({ isEditing: false });
+    }
   }
 
   handleFocus(e) {

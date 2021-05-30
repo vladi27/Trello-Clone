@@ -148,7 +148,19 @@ class ShowCardForm extends React.Component {
   }
 
   handleCloseForm(e) {
-    this.setState({ isEditing: false });
+    const currentTitle = this.props.card.title;
+    if (this.state.title !== currentTitle) {
+      const newCard = Object.assign(
+        {},
+        {
+          title: this.state.title,
+          id: this.props.card.id,
+        }
+      );
+      this.props.editCard(newCard).then(this.setState({ isEditing: false }));
+    } else {
+      this.setState({ isEditing: false });
+    }
   }
 
   handleFocus(e) {
